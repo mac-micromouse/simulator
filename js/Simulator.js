@@ -7,14 +7,19 @@ class Simulator {
 		}, ctx);
 		this.bot = new Bot(9, 9);
 
-		this.botWorker = new Worker("../test/worker.js");
+		this.botWorker = new Worker("js/worker.js");
 
-		this.botWorker.onmessage = (e) => {
-			if (e.data.type === 'MOTOR') {
-				if (e.data.left >= 100) {
-					this.bot.x += Math.cos(this.bot.rotation);
-					this.bot.y += Math.sin(this.bot.rotation);
-				}
+		this.botWorker.onmessage = (event) => {
+			if (event.data.type === "PIN_WRITE") {
+				this.bot.pins[event.data.pin] = event.data.value;
+			}
+
+			if (event.data.type === "PWM_WRITE") {
+				this.bot.pwm[event.data.channel] = event.data.duty;
+			}
+
+			if (event.data.type === "SERIAL") {
+				console.log(event.data.text);
 			}
 		};
 	}
@@ -24,8 +29,12 @@ class Simulator {
 		this.render();
 
 		this.botWorker.postMessage({
-			type: 'UPDATE_SENSORS',
-			distances: { 0: this.bot.sensors[0].getMeasurement() }
+			type: "UPDATE",
+			data: {
+				tof: this.bot.sensors.map(sensor => sensor.getMeasurement()),
+				encoderLeft: 0,
+				encoderRight: 0
+			}
 		});
 
 		window.requestAnimationFrame(this.loop.bind(this));

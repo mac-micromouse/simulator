@@ -62,6 +62,6 @@ class Sensor {
 	getMeasurement() {
 		const intersection = this.getIntersectionPoint();
 
-		return Math.round(Math.hypot(intersection.x - this.bot.x, intersection.y - this.bot.y));
+		return Math.round(Math.hypot(intersection.x - this.bot.x, intersection.y - this.bot.y) * 10);
 	}
 }

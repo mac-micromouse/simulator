@@ -1,5 +1,7 @@
 #include <emscripten.h>
 #include <stdint.h>
+#include <sstream>
+#include <string>
 
 #define HIGH 1
 #define LOW 0
@@ -66,3 +68,32 @@ public:
 void delay(int ms) {
     emscripten_sleep(ms);
 }
+
+EM_JS(void, _sendSerialMessage, (const char* str), {
+	postMessage({ type: "SERIAL", text: UTF8ToString(str) });
+});
+
+class MockSerial {
+public:
+	void begin(long baudRate) {}
+
+	template <typename T>
+	void print(T val) {
+		std::ostringstream ss;
+		ss << val;
+		_sendSerialMessage(ss.str().c_str());
+	}
+
+	template <typename T>
+	void println(T val) {
+		std::ostringstream ss;
+		ss << val << "\n";
+		_sendSerialMessage(ss.str().c_str());
+	}
+
+	void println() {
+		_sendSerialMessage("\n");
+	}
+};
+
+static MockSerial Serial;

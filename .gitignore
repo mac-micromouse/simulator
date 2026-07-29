@@ -1,2 +1,5 @@
 test/
 .vscode/
+
+wasm_bot.js
+wasm_bot.wasm

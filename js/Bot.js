@@ -8,10 +8,11 @@ class Bot {
 			new Sensor(this, -Math.PI / 2),
 			new Sensor(this, Math.PI / 2)
 		];
+		this.pins = {};
+		this.pwm = {};
 	}
 
 	update() {
-		this.rotation += 0.01;
 	}
 
 	render(ctx) {
