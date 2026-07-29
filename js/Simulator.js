@@ -24,18 +24,9 @@ class Simulator {
 		};
 	}
 
-	loop() {
-		this.bot.update();
+	loop(currentTime) {
+		this.bot.update(currentTime);
 		this.render();
-
-		this.botWorker.postMessage({
-			type: "UPDATE",
-			data: {
-				tof: this.bot.sensors.map(sensor => sensor.getMeasurement()),
-				encoderLeft: 0,
-				encoderRight: 0
-			}
-		});
 
 		window.requestAnimationFrame(this.loop.bind(this));
 	}

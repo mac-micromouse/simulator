@@ -1,22 +1,27 @@
-const DIST_BETWEEN_WHEELS = 70;
-const WHEEL_RADIUS = 15;
+const DIST_BETWEEN_WHEELS = 95;
+const WHEEL_RADIUS = 22;
 const MAX_SPEED = 15;
+const ENCODER_TICKS_PER_REV = 360;
+const MM_PER_TICK = (2 * Math.PI * WHEEL_RADIUS) / ENCODER_TICKS_PER_REV;
 
 class Bot {
 	constructor(x, y) {
 		this.x = x;
 		this.y = y;
-		this.rotation = Math.PI / 2;
+		this.rotation = 0;
 		this.sensors = [
-			new Sensor(this, 0),
-			new Sensor(this, -Math.PI / 2),
-			new Sensor(this, Math.PI / 2)
+			new Sensor(this, 0, -3, 0),
+			new Sensor(this, 0, 3, 0),
+			new Sensor(this, -Math.PI / 2, 0, 0),
+			new Sensor(this, Math.PI / 2, 0, 0)
 		];
 		this.pins = {};
 		this.pwm = {};
+		this.leftWheelDist = 0;
+		this.rightWheelDist = 0;
 	}
 
-	update() {
+	update(currentTime) {
 		const leftDir = this.getPin(16) - this.getPin(17);
 		const rightDir = this.getPin(19) - this.getPin(21);
 
@@ -36,6 +41,22 @@ class Bot {
 		this.rotation += deltaTheta;
 		this.x += centerDist * Math.cos(this.rotation);
 		this.y += centerDist * Math.sin(this.rotation);
+
+		this.leftWheelDist += Math.abs(distL);
+		this.rightWheelDist += Math.abs(distR);
+
+		const encoderLeft = (Math.floor(this.leftWheelDist / MM_PER_TICK) % 2 === 0) ? 1 : 0;
+		const encoderRight = (Math.floor(this.rightWheelDist / MM_PER_TICK) % 2 === 0) ? 1 : 0;
+
+		simulator.botWorker.postMessage({
+			type: "UPDATE",
+			data: {
+				tof: this.sensors.map(sensor => sensor.getMeasurement()),
+				millis: Math.floor(currentTime),
+				encoderLeft: encoderLeft,
+				encoderRight: encoderRight
+			}
+		});
 	}
 
 	getPin(pinNumber) {

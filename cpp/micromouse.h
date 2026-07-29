@@ -23,7 +23,7 @@ EM_JS(void, digitalWrite, (uint8_t pin, uint8_t val), {
 	}
 });
 
-EM_JS(void, digitalRead, (uint8_t pin), {
+EM_JS(uint8_t, digitalRead, (uint8_t pin), {
 	return (Module.pins && Module.pins[pin]) ? Module.pins[pin].value : 0;
 });
 
@@ -40,6 +40,10 @@ EM_JS(void, ledcWrite, (uint8_t channel, uint32_t duty), {
 		Module.pwm[channel].duty = duty;
 		postMessage({ type: "PWM_WRITE", channel: channel, duty: duty });
 	}
+});
+
+EM_JS(unsigned long, millis, (), {
+	return Module.millis;
 });
 
 EM_JS(uint16_t, _readToF, (int sensor_id), {

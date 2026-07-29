@@ -1,7 +1,9 @@
 class Sensor {
-	constructor(bot, angle) {
+	constructor(bot, angle, offsetX, offsetY) {
 		this.bot = bot;
 		this.angle = angle;
+		this.offsetX = offsetX;
+		this.offsetY = offsetY;
 	}
 
 	render(ctx) {
@@ -10,7 +12,7 @@ class Sensor {
 		ctx.setLineDash([5, 5]);
 		ctx.lineWidth = 2;
 		ctx.beginPath();
-		ctx.moveTo(this.bot.x * MAZE_GRID_SIZE / 18, this.bot.y * MAZE_GRID_SIZE / 18);
+		ctx.moveTo((this.bot.x + this.offsetX) * MAZE_GRID_SIZE / 18, (this.bot.y + this.offsetY) * MAZE_GRID_SIZE / 18);
 		const intersection = this.getIntersectionPoint(simulator.maze);
 		ctx.lineTo(intersection.x * MAZE_GRID_SIZE / 18, intersection.y * MAZE_GRID_SIZE / 18);
 		ctx.stroke();
@@ -27,8 +29,8 @@ class Sensor {
 		const computeIntersection = (x, y, dx, dy) => {
 			const rot = this.angle + this.bot.rotation;
 			const intersection = intersectLines(
-				this.bot.x, this.bot.y,
-				this.bot.x + Math.cos(rot) * 10000, this.bot.y + Math.sin(rot) * 10000,
+				this.bot.x + this.offsetX, this.bot.y + this.offsetY,
+				this.bot.x + this.offsetX + Math.cos(rot) * 10000, this.bot.y + this.offsetY + Math.sin(rot) * 10000,
 				x, y, x + dx, y + dy
 			);
 
