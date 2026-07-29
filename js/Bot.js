@@ -10,14 +10,17 @@ class Bot {
 		];
 	}
 
+	update() {
+		this.rotation += 0.01;
+	}
+
 	render(ctx) {
 		ctx.save();
 		ctx.translate(this.x * MAZE_GRID_SIZE / 18, this.y * MAZE_GRID_SIZE / 18);
 		ctx.rotate(this.rotation);
 		ctx.fillStyle = "#4b6ba3";
-		ctx.fillRect(-20, -10, 40, 20);
-
-		this.sensors.forEach(sensor => sensor.render(ctx));
+		ctx.fillRect(-15, -10, 30, 20);
 		ctx.restore();
+		this.sensors.forEach(sensor => sensor.render(ctx));
 	}
 }
