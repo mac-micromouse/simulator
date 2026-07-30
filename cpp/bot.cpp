@@ -197,7 +197,6 @@ void loop() {
 	while (frontDist1 > 120) {
 		delay(30);
 		frontDist1 = frontToF1.read();
-		Serial.println(frontDist1);
 	}
 	stop();
 	delay(100);

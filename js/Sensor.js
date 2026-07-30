@@ -1,3 +1,6 @@
+const TOF_CAST_RAYS = 10;
+const TOF_FOV = 25 * Math.PI / 180;
+
 class Sensor {
 	constructor(bot, angle, offsetX, offsetY) {
 		this.bot = bot;
@@ -18,8 +21,21 @@ class Sensor {
 		if (intersection) {
 			ctx.beginPath();
 			ctx.moveTo(rx * MAZE_GRID_SIZE / 18, ry * MAZE_GRID_SIZE / 18);
-			ctx.lineTo(intersection.x * MAZE_GRID_SIZE / 18, intersection.y * MAZE_GRID_SIZE / 18);
-			ctx.stroke();
+			for (let i = 0; i < TOF_CAST_RAYS; i++) {
+				const angle = -TOF_FOV / 2 + i * TOF_FOV / TOF_CAST_RAYS;
+				const intersection = this.getIntersectionPointAtAngle(angle);
+				ctx.lineTo(
+					(intersection.x) * MAZE_GRID_SIZE / 18,
+					(intersection.y) * MAZE_GRID_SIZE / 18
+				);
+			}
+
+			ctx.lineTo(
+				rx * MAZE_GRID_SIZE / 18, ry * MAZE_GRID_SIZE / 18
+			);
+
+			ctx.fillStyle = "rgba(255, 0, 0, 0.2)";
+			ctx.fill();
 
 			ctx.beginPath();
 			ctx.fillStyle = "red";
@@ -39,10 +55,10 @@ class Sensor {
 		return [rx + this.bot.x, ry + this.bot.y];
 	}
 
-	getIntersectionPoint() {
+	getIntersectionPointAtAngle(angle) {
 		const allIntersections = [];
 		const computeIntersection = (x, y, dx, dy) => {
-			const rot = this.angle + this.bot.rotation;
+			const rot = this.angle + this.bot.rotation + angle;
 			const [rx, ry] = this.getActualPosition();
 			const intersection = intersectLines(
 				rx, ry,
@@ -77,13 +93,26 @@ class Sensor {
 		return allIntersections[0];
 	}
 
-	getMeasurement() {
-		const intersection = this.getIntersectionPoint();
+	getIntersectionPoint() {
+		const dist = this.getMeasurement() / 10;
+		const [rx, ry] = this.getActualPosition();
+		return {
+			x: rx + Math.cos(this.angle + this.bot.rotation) * dist,
+			y: ry + Math.sin(this.angle + this.bot.rotation) * dist
+		};
+	}
 
-		if (!intersection) {
-			return 8190;
+	getMeasurement() {
+		let num = 0, den = 0;
+
+		for (let i = 0; i < TOF_CAST_RAYS; i++) {
+			const angle = -TOF_FOV / 2 + i * TOF_FOV / TOF_CAST_RAYS;
+			const intersection = this.getIntersectionPointAtAngle(angle);
+			const dist = Math.hypot(intersection.x - this.bot.x, intersection.y - this.bot.y) * 10;
+			num += 1 / dist;
+			den += 1 / (dist ** 2);
 		}
 
-		return Math.round(Math.hypot(intersection.x - this.bot.x, intersection.y - this.bot.y) * 10);
+		return num / den;
 	}
 }
