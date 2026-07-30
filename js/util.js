@@ -26,3 +26,10 @@ function intersectLines(x1, y1, x2, y2, x3, y3, x4, y4) {
 
 	return {x, y};
 }
+
+function positionAfterRotation(x, y, rotation) {
+	return [
+		x * Math.cos(rotation) - y * Math.sin(rotation),
+		x * Math.sin(rotation) + y * Math.cos(rotation)
+	];
+}

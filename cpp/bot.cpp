@@ -126,16 +126,13 @@ void loop() {
 	uint16_t leftDist = leftToF.read();
 	uint16_t rightDist = rightToF.read();
 
-	Serial.println(std::to_string(leftDist) + " " + std::to_string(rightDist));
-
-	if (frontDist1 > 150) {
-		driveForward(255);
-	} else if (rightDist > 180) {
+	if (frontDist1 > 150) {}
+	else if (rightDist > 180) {
 		turnRightDegrees(90);
 	} else if (leftDist > 180) {
 		turnLeftDegrees(90);
 	} else {
-		while (frontDist1 <= 100) {
+		while (frontDist1 <= 180) {
 			turnRightDegrees(90);
 			frontDist1 = frontToF1.read();
 		}
@@ -196,8 +193,12 @@ void loop() {
 		}
 	}
 
-	driveForward(255);
-	delay(330);
+	driveForward(150);
+	while (frontDist1 > 120) {
+		delay(30);
+		frontDist1 = frontToF1.read();
+		Serial.println(frontDist1);
+	}
 	stop();
 	delay(100);
 }
