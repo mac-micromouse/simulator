@@ -10,8 +10,7 @@ class Bot {
 		this.y = y;
 		this.rotation = 0;
 		this.sensors = [
-			new Sensor(this, 0, 5, -3),
-			new Sensor(this, 0, 5, 3),
+			new Sensor(this, 0, 5, 0),
 			new Sensor(this, -Math.PI / 2, 0, -3),
 			new Sensor(this, Math.PI / 2, 0, 3)
 		];

@@ -14,7 +14,7 @@ const int ENB = 22;
 const int ENC_L_A = 34;
 const int ENC_R_A = 35;
 
-VL53L1X frontToF1(0), frontToF2(1), leftToF(2), rightToF(3);
+VL53L1X frontToF(0), leftToF(1), rightToF(2);
 
 int lastEncoderValL = LOW, lastEncoderValR = LOW;
 int leftTicks = 0, rightTicks = 0;
@@ -33,20 +33,19 @@ void setup() {
 	pinMode(ENC_L_A, INPUT);
 	pinMode(ENC_R_A, INPUT);
 
-	frontToF1.init();
-	frontToF2.init();
+	frontToF.init();
 	leftToF.init();
 	rightToF.init();
 }
 
-void driveForward(int speed) {
+void driveForward(int speed1, int speed2) {
 	digitalWrite(IN1, HIGH);
 	digitalWrite(IN2, LOW);
 	digitalWrite(IN3, HIGH);
 	digitalWrite(IN4, LOW);
 
-	ledcWrite(0, speed);
-	ledcWrite(1, speed);
+	ledcWrite(0, speed1);
+	ledcWrite(1, speed2);
 }
 
 void driveBackward(int speed) {
@@ -80,7 +79,7 @@ void turnLeft(int speed) {
 }
 
 void stop() {
-	driveForward(0);
+	driveForward(0, 0);
 }
 
 void updateEncoders() {
@@ -121,82 +120,44 @@ void turnLeftDegrees(float degrees) {
 
 void loop() {
 	updateEncoders();
-	uint16_t frontDist1 = frontToF1.read();
-	uint16_t frontDist2 = frontToF2.read();
+	uint16_t frontDist = frontToF.read();
 	uint16_t leftDist = leftToF.read();
 	uint16_t rightDist = rightToF.read();
 
-	if (frontDist1 > 150) {}
+	if (frontDist > 150) {}
 	else if (rightDist > 180) {
 		turnRightDegrees(90);
 	} else if (leftDist > 180) {
 		turnLeftDegrees(90);
 	} else {
-		while (frontDist1 <= 180) {
+		while (frontDist <= 180) {
 			turnRightDegrees(90);
-			frontDist1 = frontToF1.read();
+			frontDist = frontToF.read();
 		}
 	}
 
-	frontDist1 = frontToF1.read();
-	frontDist2 = frontToF2.read();
+	frontDist = frontToF.read();
 
-	if (frontDist1 > frontDist2 && frontDist1 - frontDist2 > 2) {
-		int iters = 0;
-		while (frontDist1 - frontDist2 > 2 && iters++ < 5) {
-			turnRight(75);
-			delay(100);
-			stop();
-			delay(200);
-			frontDist1 = frontToF1.read();
-			frontDist2 = frontToF2.read();
-		}
-
-		if (frontDist1 - frontDist2 > 2 || frontDist2 - frontDist1 > 20) {
-			turnLeft(75);
-			delay(500);
-			iters = 0;
-			while (frontDist1 - frontDist2 > 2 && iters++ < 5) {
-				turnLeft(50);
-				delay(100);
-				stop();
-				delay(200);
-				frontDist1 = frontToF1.read();
-				frontDist2 = frontToF2.read();
-			}
-		}
-	}
-
-	if (frontDist2 > frontDist1 && frontDist2 - frontDist1 > 2) {
-		int iters = 0;
-		while (frontDist2 - frontDist1 > 2 && iters++ < 5) {
-			turnLeft(75);
-			delay(100);
-			stop();
-			delay(200);
-			frontDist2 = frontToF2.read();
-			frontDist1 = frontToF1.read();
-		}
-
-		if (frontDist2 - frontDist1 > 2 || frontDist1 - frontDist2 > 20) {
-			turnRight(75);
-			delay(500);
-			iters = 0;
-			while (frontDist2 - frontDist1 > 2 && iters++ < 5) {
-				turnRight(75);
-				delay(100);
-				stop();
-				delay(200);
-				frontDist1 = frontToF1.read();
-				frontDist2 = frontToF2.read();
-			}
-		}
-	}
-
-	driveForward(150);
-	while (frontDist1 > 120) {
+	driveForward(150, 150);
+	int turningMoratorium = 0;
+	while (frontDist > 55) {
+		turningMoratorium--;
 		delay(30);
-		frontDist1 = frontToF1.read();
+		frontDist = frontToF.read();
+		leftDist = leftToF.read();
+		rightDist = rightToF.read();
+
+		if (leftDist < 150 && rightDist < 150) {
+			if (leftDist < rightDist) {
+				driveForward(150, 255);
+			}
+
+			if (rightDist < leftDist) {
+				driveForward(255, 150);
+			}
+		} else {
+			driveForward(255, 255);
+		}
 	}
 	stop();
 	delay(100);

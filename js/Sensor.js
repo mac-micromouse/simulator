@@ -108,7 +108,8 @@ class Sensor {
 		for (let i = 0; i < TOF_CAST_RAYS; i++) {
 			const angle = -TOF_FOV / 2 + i * TOF_FOV / TOF_CAST_RAYS;
 			const intersection = this.getIntersectionPointAtAngle(angle);
-			const dist = Math.hypot(intersection.x - this.bot.x, intersection.y - this.bot.y) * 10;
+			const [rx, ry] = this.getActualPosition();
+			const dist = Math.hypot(intersection.x - rx, intersection.y - ry) * 10;
 			num += 1 / dist;
 			den += 1 / (dist ** 2);
 		}
