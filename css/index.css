@@ -1,9 +1,20 @@
+html, body {
+	padding: 0;
+	margin: 0;
+	background: #222;
+	font-family: sans-serif;
+}
+
+* {
+	box-sizing: border-box;
+}
+
 #serial-interface {
 	font-family: monospace;
 	padding: 5px 10px;
-	background: #333;
+	background: #2d2e30;
 	color: white;
-	height: 300px;
+	height: calc(100vh - 664px);
 	overflow: auto;
 }
 
@@ -12,7 +23,52 @@
 }
 
 #code-editor {
-	width: 1000px;
-	height: 1000px;
+	width: 100%;
+	height: calc(100vh - 55px);
 	font-size: 16px;
+}
+
+#container {
+	display: flex;
+}
+
+#container-left {
+	width: calc(100% - 614px);
+	height: calc(100vh - 10px);
+	margin: 5px;
+}
+
+#container-right {
+	width: 614px;
+	margin: 5px;
+}
+
+.section-header {
+	width: 100%;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	background: #2d2e30;
+	border-radius: 5px;
+	margin-bottom: 5px;
+}
+
+.section-header-elem {
+	background: #383a3d;
+	width: min-content;
+	margin-left: 5px;
+	padding: 3px 10px;
+	color: rgb(204, 208, 214);
+	user-select: none;
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+.section-header-elem.selected {
+	color: white;
+	background: #44474d;
+}
+
+canvas, #code-editor, #serial-interface {
+	border-radius: 5px;
 }

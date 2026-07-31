@@ -20,8 +20,21 @@
 		<link rel="stylesheet" href="css/index.css">
 	</head>
 	<body>
-		<canvas></canvas>
-		<div id="code-editor"></div>
-		<div id="serial-interface"></div>
+		<div id="container">
+			<div id="container-left">
+				<div class="section-header">
+					<div class="section-header-elem selected">Editor</div>
+					<div class="section-header-elem">Documentation</div>
+				</div>
+				<div id="code-editor"></div>
+			</div>
+			<div id="container-right">
+				<div class="section-header">
+					<div class="section-header-elem selected">Simulation</div>
+				</div>
+				<canvas></canvas>
+				<div id="serial-interface"></div>
+			</div>
+		</div>
 	</body>
 </html>

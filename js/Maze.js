@@ -105,6 +105,9 @@ class Maze {
 		this.ctx.canvas.width = this.width * MAZE_GRID_SIZE + 4;
 		this.ctx.canvas.height = this.height * MAZE_GRID_SIZE + 4;
 
+		ctx.fillStyle = "white";
+		ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+
 		for (let x = 0; x < this.width; x++) {
 			for (let y = 0; y < this.height; y++) {
 				this.nodes[x][y].render(this.ctx);
