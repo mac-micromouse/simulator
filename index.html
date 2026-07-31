@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<script src="js/ace/ace.js"></script>
+		<script src="js/ace/ext-language_tools.js"></script>
+		<script src="js/ace/mode-c_cpp.js"></script>
+		<script src="js/ace/theme-one_dark.js"></script>
+
+		<script src="js/interface/SerialInterface.js"></script>
+		<script src="js/interface/EditorInterface.js"></script>
+		<script src="js/interface/Interface.js"></script>
+
 		<script src="js/util.js"></script>
 		<script src="js/Maze.js"></script>
 		<script src="js/Sensor.js"></script>
 		<script src="js/Bot.js"></script>
-		<script src="js/Interface.js"></script>
-		<script src="js/SerialInterface.js"></script>
 		<script src="js/Simulator.js"></script>
 		<script src="js/main.js"></script>
 		
@@ -14,6 +21,7 @@
 	</head>
 	<body>
 		<canvas></canvas>
+		<div id="code-editor"></div>
 		<div id="serial-interface"></div>
 	</body>
 </html>
