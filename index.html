@@ -18,19 +18,22 @@
 		<script src="js/main.js"></script>
 		
 		<link rel="stylesheet" href="css/index.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 	</head>
 	<body>
 		<div id="container">
 			<div id="container-left">
 				<div class="section-header">
-					<div class="section-header-elem selected">Editor</div>
-					<div class="section-header-elem">Documentation</div>
+					<div class="section-header-elem selected"><span class="fa fa-code"></span> Editor</div>
+					<div class="section-header-elem"><span class="fa fa-book"></span> Documentation</div>
+					<div class="section-header-elem"><span class="fa fa-list-ul"></span> Examples</div>
 				</div>
 				<div id="code-editor"></div>
 			</div>
 			<div id="container-right">
 				<div class="section-header">
-					<div class="section-header-elem selected">Simulation</div>
+					<div class="section-header-elem selected"><span class="fa fa-bolt"></span> Simulation</div>
+					<div class="section-header-elem"><span class="fa fa-gear"></span> Bot Options</div>
 				</div>
 				<canvas></canvas>
 				<div id="serial-interface"></div>

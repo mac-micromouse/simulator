@@ -55,8 +55,9 @@ html, body {
 
 .section-header-elem {
 	background: #383a3d;
-	width: min-content;
+	width: max-content;
 	margin-left: 5px;
+	margin-right: 5px;
 	padding: 3px 10px;
 	color: rgb(204, 208, 214);
 	user-select: none;
@@ -71,4 +72,9 @@ html, body {
 
 canvas, #code-editor, #serial-interface {
 	border-radius: 5px;
+}
+
+.section-header-elem span.fa {
+	font-size: 0.9em;
+	margin-right: 3px;
 }
