@@ -139,9 +139,8 @@ void loop() {
 	frontDist = frontToF.read();
 
 	driveForward(150, 150);
-	int turningMoratorium = 0;
 	while (frontDist > 55) {
-		turningMoratorium--;
+		Serial.println(frontDist);
 		delay(30);
 		frontDist = frontToF.read();
 		leftDist = leftToF.read();

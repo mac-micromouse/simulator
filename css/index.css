@@ -1,0 +1,12 @@
+#serial-interface {
+	font-family: monospace;
+	padding: 5px 10px;
+	background: #333;
+	color: white;
+	height: 300px;
+	overflow: auto;
+}
+
+#serial-interface span {
+	display: block;
+}

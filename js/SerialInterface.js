@@ -1,0 +1,27 @@
+class SerialInterface {
+	constructor(container) {
+		this.container = container;
+		this.container.innerHTML = `<span></span>`;
+		this.currentSpan = this.container.querySelector("span");
+	}
+
+	postText(text) {
+		const split = text.split("\n");
+
+		for (let i = 0; i < split.length; i++) {
+			if (i > 0) {
+				const span = document.createElement("span");
+				this.container.appendChild(span);
+				this.currentSpan = span;
+			}
+
+			this.currentSpan.innerText += split[i];
+		}
+
+		this.container.scrollTop = this.container.scrollHeight;
+
+		while (this.container.children.length > 100) {
+			this.container.firstElementChild.remove();
+		}
+	}
+}

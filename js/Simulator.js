@@ -19,9 +19,11 @@ class Simulator {
 			}
 
 			if (event.data.type === "SERIAL") {
-				console.log(event.data.text);
+				this.interface.serial.postText(event.data.text);
 			}
 		};
+
+		this.interface = new Interface();
 	}
 
 	loop(currentTime) {
