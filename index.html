@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/cpp.min.js"></script>
+
 		<script src="js/ace/ace.js"></script>
 		<script src="js/ace/ext-language_tools.js"></script>
 		<script src="js/ace/mode-c_cpp.js"></script>
@@ -44,9 +50,7 @@
 					</div>
 					<div id="code-editor"></div>
 				</div>
-				<div class="left-tab" id="documentation-container">
-					<h1>Documentation</h1>
-				</div>
+				<div class="left-tab" id="documentation-container"></div>
 				<div class="left-tab" id="examples-container">
 					<h1>Examples</h1>
 					<div id="examples-listing"></div>

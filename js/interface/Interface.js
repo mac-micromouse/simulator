@@ -1,10 +1,12 @@
 class Interface {
 	constructor() {
+		this.mdConverter = new showdown.Converter();
 		this.serial = new SerialInterface(document.getElementById("serial-interface-log"));
 		this.editor = new EditorInterface(document.getElementById("code-editor"));
 
 		this.addListeners();
 		this.createExamples();
+		this.createDocumentation();
 	}
 
 	addListeners() {
@@ -84,5 +86,13 @@ class Interface {
 				this.editor.addFile(example.saveAs, exampleCode);
 			});
 		}
+	}
+
+	async createDocumentation() {
+		const documentationContainer = document.getElementById("documentation-container");
+		const docsMd = await (await fetch("/documentation/main.md")).text();
+
+		documentationContainer.innerHTML = this.mdConverter.makeHtml(docsMd);
+		hljs.highlightAll();
 	}
 }

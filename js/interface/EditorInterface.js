@@ -10,7 +10,23 @@ class EditorInterface {
 
 		this.files = [{
 			name: "bot.cpp",
-			code: `#include "micromouse.h"\n\nint main() {\n\tSerial.println("Hello world!");\n}`
+			code: `#include "micromouse.h"
+
+int setup() {
+    Serial.println("Hello world!");
+}
+
+int loop() {
+
+}
+
+int main() {
+    setup();
+    while (1) {
+        loop();
+    }
+    return 0;
+}`
 		}];
 		this.currentFile = 0;
 
