@@ -99,6 +99,10 @@ html, body {
 	transition: 0.2s;
 }
 
+#save-button {
+	background: transparent !important;
+}
+
 .section-header-button.disabled {
 	background: #383a3d !important;
 	cursor: not-allowed !important;
