@@ -1,6 +1,6 @@
 class Interface {
 	constructor() {
-		this.serial = new SerialInterface(document.getElementById("serial-interface"));
+		this.serial = new SerialInterface(document.getElementById("serial-interface-log"));
 		this.editor = new EditorInterface(document.getElementById("code-editor"));
 
 		this.addListeners();
@@ -10,6 +10,7 @@ class Interface {
 		const buttonRestart = document.getElementById("button-restart");
 		const buttonCompile = document.getElementById("button-compile");
 		const buttonMaze = document.getElementById("button-maze");
+		const buttonClear = document.getElementById("button-clear");
 
 		buttonCompile.addEventListener("click", async () => {
 			buttonCompile.classList.add("disabled");
@@ -27,6 +28,10 @@ class Interface {
 
 		buttonRestart.addEventListener("click", () => {
 			simulator.restart();
+		});
+
+		buttonClear.addEventListener("click", () => {
+			this.serial.clear();
 		});
 	}
 }

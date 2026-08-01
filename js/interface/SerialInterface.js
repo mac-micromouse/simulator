@@ -1,8 +1,7 @@
 class SerialInterface {
 	constructor(container) {
 		this.container = container;
-		this.container.innerHTML = `<span></span>`;
-		this.currentSpan = this.container.querySelector("span");
+		this.clear();
 	}
 
 	postText(text) {
@@ -23,5 +22,10 @@ class SerialInterface {
 		while (this.container.children.length > 100) {
 			this.container.firstElementChild.remove();
 		}
+	}
+
+	clear() {
+		this.container.innerHTML = `<span></span>`;
+		this.currentSpan = this.container.querySelector("span");
 	}
 }

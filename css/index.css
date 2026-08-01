@@ -10,16 +10,17 @@ html, body {
 	box-sizing: border-box;
 }
 
-#serial-interface {
+#serial-interface-log {
 	font-family: monospace;
 	padding: 5px 10px;
 	background: #2d2e30;
 	color: white;
-	height: calc(100vh - 664px);
+	height: calc(100vh - 709px);
 	overflow: auto;
+	border-radius: 5px;
 }
 
-#serial-interface span {
+#serial-interface-log span {
 	display: block;
 	min-height: 15px;
 }
@@ -75,6 +76,10 @@ html, body {
 .section-header-elem {
 	width: max-content;
 	padding: 3px 10px;
+	font-size: 0.9em;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .section-header-elem.selected {
@@ -113,7 +118,7 @@ canvas, #code-editor, #serial-interface {
 
 .section-header-elem span.fa {
 	font-size: 0.9em;
-	margin-right: 3px;
+	margin-right: 6px;
 }
 
 .fa {
