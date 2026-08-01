@@ -159,4 +159,81 @@ canvas, #code-editor, #serial-interface {
 
 #documentation-container, #examples-container {
 	background: #2d2e30;
+	padding: 10px 20px;
+	border-radius: 5px;
+	color: white;
+}
+
+h1 {
+	margin: 0 0 10px 0;
+}
+
+.example {
+	width: calc(50% - 5px);
+	min-width: 400px;
+	background: #36393d;
+	padding: 10px 15px;
+	border-radius: 5px;
+	margin-bottom: 10px;
+	display: flex;
+	flex-direction: column;
+}
+
+.example-name {
+	font-size: 1.1em;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+.badge-easy, .badge-medium, .badge-hard {
+	font-size: 0.9em;
+	margin-left: 10px;
+	background: #40464e;
+	padding: 2px 8px;
+	border-radius: 5px;
+}
+
+.badge-easy {
+	color: rgb(96, 202, 96);
+}
+
+.badge-medium {
+	color: rgb(216, 224, 97);
+}
+
+.badge-hard {
+	color: rgb(255, 102, 102);
+}
+
+.example-desc {
+	margin-bottom: 10px;
+}
+
+.example-button {
+	user-select: none;
+	cursor: pointer;
+	background: #40464e;
+	width: max-content;
+	padding: 3px 10px;
+	border-radius: 5px;
+	font-size: 0.9em;
+	margin-top: auto;
+	transition: 0.2s;
+}
+
+.example-button:hover {
+	background: #444c57;
+}
+
+#examples-listing {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	container-type: inline-size;
+}
+
+@container (max-width: 810px) {
+	.example {
+		width: 100%;
+	}
 }

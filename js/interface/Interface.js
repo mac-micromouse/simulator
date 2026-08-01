@@ -4,6 +4,7 @@ class Interface {
 		this.editor = new EditorInterface(document.getElementById("code-editor"));
 
 		this.addListeners();
+		this.createExamples();
 	}
 
 	addListeners() {
@@ -33,5 +34,43 @@ class Interface {
 		buttonClear.addEventListener("click", () => {
 			this.serial.clear();
 		});
+
+		const tabEditor = document.getElementById("tab-editor");
+		const tabDocumentation = document.getElementById("tab-documentation");
+		const tabExamples = document.getElementById("tab-examples");
+
+		const editorContainer = document.getElementById("editor-container");
+		const documentationContainer = document.getElementById("documentation-container");
+		const examplesContainer = document.getElementById("examples-container");
+
+		tabEditor.addEventListener("click", () => this.selectLeftTab(editorContainer, tabEditor));
+		tabDocumentation.addEventListener("click", () => this.selectLeftTab(documentationContainer, tabDocumentation));
+		tabExamples.addEventListener("click", () => this.selectLeftTab(examplesContainer, tabExamples));
+	}
+
+	selectLeftTab(tab, button) {
+		[...document.querySelectorAll(".left-tab")].forEach(item => item.style.display = "none");
+		tab.style.display = "block";
+
+		[...document.getElementById("container-left").querySelectorAll(".selected")]
+			.forEach(elem => elem.classList.remove("selected"));
+
+		button.classList.add("selected");
+	}
+
+	async createExamples() {
+		const examplesData = await (await fetch("/cpp/examples.json")).json();
+		const editorContainer = document.getElementById("examples-listing");
+		
+		for (const example of examplesData) {
+			const container = document.createElement("div");
+			container.classList.add("example");
+			container.innerHTML = `
+				<div class="example-name">${example.name} <span class="badge-${example.complexity}">${example.complexity}</span></div>
+				<div class="example-desc">${example.desc}</div>
+				<div class="example-button"><span class="fa fa-plus"></span> Add to editor</div>
+			`;
+			editorContainer.appendChild(container);
+		}
 	}
 }
