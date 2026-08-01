@@ -103,6 +103,10 @@ html, body {
 	background: #44474d;
 }
 
+.section-header-button:active .fa {
+	font-size: 0.9em;
+}
+
 canvas, #code-editor, #serial-interface {
 	border-radius: 5px;
 }
@@ -110,6 +114,10 @@ canvas, #code-editor, #serial-interface {
 .section-header-elem span.fa {
 	font-size: 0.9em;
 	margin-right: 3px;
+}
+
+.fa {
+	transition: 0.2s;
 }
 
 .fa-spinner {

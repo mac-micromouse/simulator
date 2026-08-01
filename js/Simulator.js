@@ -10,9 +10,18 @@ class Simulator {
 
 		this.interface = new Interface();
 		this.init();
+
+		this.lastCompile = {
+			js: null,
+			wasm: null
+		};
 	}
 
 	init() {
+		if (this.botWorker) {
+			this.botWorker.terminate();
+		}
+
 		this.bot = new Bot(9, 9);
 
 		this.botWorker = new Worker("js/worker.js");
@@ -62,10 +71,6 @@ class Simulator {
 			return;
 		}
 
-		if (this.botWorker) {
-			this.botWorker.terminate();
-		}
-
 		this.interface.serial.postText("Initializing...\n");
 
 		this.init();
@@ -75,6 +80,36 @@ class Simulator {
 			js: data.js,
 			wasmBase64: data.wasmBase64
 		});
+
+		this.interface.serial.postText("Done!\n\n");
+		this.lastCompile = {
+			js: data.js,
+			wasm: data.wasmBase64
+		};
+	}
+
+	restart() {
+		this.interface.serial.postText("\nRestarting...\n\n");
+		this.init();
+		this.botWorker.postMessage({
+			type: "INIT",
+			js: this.lastCompile.js,
+			wasmBase64: this.lastCompile.wasm
+		});
+	}
+
+	generateAndRestart() {
+		if (!this.lastCompile.js || !this.lastCompile.wasm) {
+			return;
+		}
+
+		this.restart();
+		this.interface.serial.postText("Regenerating maze...\n");
+
+		this.maze = new Maze({
+			width: 12,
+			height: 12
+		}, this.ctx);
 
 		this.interface.serial.postText("Done!\n\n");
 	}
