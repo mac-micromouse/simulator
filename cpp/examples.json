@@ -1,0 +1,7 @@
+[
+	{
+		"name": "Wall Follower",
+		"desc": "",
+		"path": "cpp/bot.cpp"
+	}
+]

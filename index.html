@@ -25,15 +25,29 @@
 			<div id="container-left">
 				<div class="section-header">
 					<div class="section-header-items">
-						<div class="section-header-elem selected"><span class="fa fa-code"></span> Editor</div>
-						<div class="section-header-elem"><span class="fa fa-book"></span> Documentation</div>
-						<div class="section-header-elem"><span class="fa fa-list-ul"></span> Examples</div>
+						<div class="section-header-elem selected" id="tab-editor"><span class="fa fa-code"></span> Editor</div>
+						<div class="section-header-elem" id="tab-documentation"><span class="fa fa-book"></span> Documentation</div>
+						<div class="section-header-elem" id="tab-examples"><span class="fa fa-list-ul"></span> Examples</div>
 					</div>
 					<div class="section-header-buttons">
 						<div class="section-header-button" id="save-button"><span class="fa fa-check"></span></div>
 					</div>
 				</div>
-				<div id="code-editor"></div>
+				<div class="left-tab" id="editor-container">
+					<div class="section-header small">
+						<div class="section-header-items">
+							<div class="section-header-elem selected">bot.cpp</div>
+							<div class="section-header-button" id="button-add-file" title="Add file"><span class="fa fa-plus"></span></div>
+						</div>
+					</div>
+					<div id="code-editor"></div>
+				</div>
+				<div class="left-tab" id="documentation-container">
+
+				</div>
+				<div class="left-tab" id="examples-container">
+
+				</div>
 			</div>
 			<div id="container-right">
 				<div class="section-header">

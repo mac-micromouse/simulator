@@ -27,8 +27,12 @@ html, body {
 
 #code-editor {
 	width: 100%;
-	height: calc(100vh - 55px);
+	height: calc(100vh - 95px);
 	font-size: 16px;
+}
+
+.left-tab {
+	height: calc(100vh - 55px);
 }
 
 #container {
@@ -56,6 +60,15 @@ html, body {
 	border-radius: 5px;
 	margin-bottom: 5px;
 	overflow: auto;
+}
+
+.section-header.small {
+	height: 35px;
+}
+
+.section-header.small .section-header-elem, .section-header.small .section-header-button {
+	height: 25px;
+	font-size: 0.8em !important;
 }
 
 .section-header-items {
@@ -101,6 +114,7 @@ html, body {
 
 #save-button {
 	background: transparent !important;
+	cursor: default !important;
 }
 
 .section-header-button.disabled {
@@ -141,4 +155,8 @@ canvas, #code-editor, #serial-interface {
 	to {
 		transform: rotate(360deg);
 	}
+}
+
+#documentation-container, #examples-container {
+	background: #2d2e30;
 }
