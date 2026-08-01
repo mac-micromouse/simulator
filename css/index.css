@@ -237,3 +237,7 @@ h1 {
 		width: 100%;
 	}
 }
+
+#files-list {
+	display: flex;
+}
