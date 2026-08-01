@@ -3,6 +3,7 @@ html, body {
 	margin: 0;
 	background: #222;
 	font-family: sans-serif;
+	overflow: hidden;
 }
 
 * {
@@ -20,6 +21,7 @@ html, body {
 
 #serial-interface span {
 	display: block;
+	min-height: 15px;
 }
 
 #code-editor {
@@ -48,25 +50,56 @@ html, body {
 	height: 40px;
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	background: #2d2e30;
 	border-radius: 5px;
 	margin-bottom: 5px;
+	overflow: auto;
 }
 
-.section-header-elem {
-	background: #383a3d;
-	width: max-content;
+.section-header-items {
+	display: flex;
+}
+
+.section-header-elem, .section-header-button {
 	margin-left: 5px;
 	margin-right: 5px;
-	padding: 3px 10px;
+	height: 30px;
 	color: rgb(204, 208, 214);
+	background: #383a3d;
 	user-select: none;
 	cursor: pointer;
 	border-radius: 5px;
 }
 
+.section-header-elem {
+	width: max-content;
+	padding: 3px 10px;
+}
+
 .section-header-elem.selected {
 	color: white;
+	background: #44474d;
+}
+
+.section-header-buttons {
+	display: flex;
+}
+
+.section-header-button {
+	width: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: 0.2s;
+}
+
+.section-header-button.disabled {
+	background: #383a3d !important;
+	cursor: not-allowed !important;
+}
+
+.section-header-button:hover {
 	background: #44474d;
 }
 
@@ -77,4 +110,18 @@ canvas, #code-editor, #serial-interface {
 .section-header-elem span.fa {
 	font-size: 0.9em;
 	margin-right: 3px;
+}
+
+.fa-spinner {
+	animation: spin 1s linear 0s infinite forwards;
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(360deg);
+	}
 }

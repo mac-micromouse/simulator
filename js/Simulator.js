@@ -45,6 +45,8 @@ class Simulator {
 	}
 
 	async compileAndDeploy(code) {
+		this.interface.serial.postText("\nSending code to server...\n");
+
 		const response = await fetch(COMPILE_SERVER_URL, {
 			method: "POST",
 			headers: {
@@ -56,12 +58,15 @@ class Simulator {
 		const data = await response.json();
 
 		if (!response.ok) {
-			throw new Error(data.detail || "Error during compilation");
+			this.interface.serial.postText(data.detail ? `Error: ${data.detail}\n\n` : "Error during compilation\n\n");
+			return;
 		}
 
 		if (this.botWorker) {
 			this.botWorker.terminate();
 		}
+
+		this.interface.serial.postText("Initializing...\n");
 
 		this.init();
 		
@@ -70,5 +75,7 @@ class Simulator {
 			js: data.js,
 			wasmBase64: data.wasmBase64
 		});
+
+		this.interface.serial.postText("Done!\n\n");
 	}
 }

@@ -24,16 +24,24 @@
 		<div id="container">
 			<div id="container-left">
 				<div class="section-header">
-					<div class="section-header-elem selected"><span class="fa fa-code"></span> Editor</div>
-					<div class="section-header-elem"><span class="fa fa-book"></span> Documentation</div>
-					<div class="section-header-elem"><span class="fa fa-list-ul"></span> Examples</div>
+					<div class="section-header-items">
+						<div class="section-header-elem selected"><span class="fa fa-code"></span> Editor</div>
+						<div class="section-header-elem"><span class="fa fa-book"></span> Documentation</div>
+						<div class="section-header-elem"><span class="fa fa-list-ul"></span> Examples</div>
+					</div>
 				</div>
 				<div id="code-editor"></div>
 			</div>
 			<div id="container-right">
 				<div class="section-header">
-					<div class="section-header-elem selected"><span class="fa fa-bolt"></span> Simulation</div>
-					<div class="section-header-elem"><span class="fa fa-gear"></span> Bot Options</div>
+					<div class="section-header-items">
+						<div class="section-header-elem selected"><span class="fa fa-bolt"></span> Simulation</div>
+						<div class="section-header-elem"><span class="fa fa-gear"></span> Bot Options</div>
+					</div>
+					<div class="section-header-buttons">
+						<div class="section-header-button" id="button-restart" title="Restart"><span class="fa fa-arrow-rotate-right"></span></div>
+						<div class="section-header-button" id="button-compile" title="Compile and run"><span class="fa fa-play"></span></div>
+					</div>
 				</div>
 				<canvas></canvas>
 				<div id="serial-interface"></div>
