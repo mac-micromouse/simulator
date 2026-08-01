@@ -74,6 +74,15 @@ class Interface {
 				<div class="example-button"><span class="fa fa-plus"></span> Add to editor</div>
 			`;
 			editorContainer.appendChild(container);
+
+			container.querySelector(".example-button").addEventListener("click", async () => {
+				const editorContainer = document.getElementById("editor-container");
+				const tabEditor = document.getElementById("tab-editor");
+				this.selectLeftTab(editorContainer, tabEditor);
+
+				const exampleCode = await (await fetch(example.path)).text();
+				this.editor.addFile(example.saveAs, exampleCode);
+			});
 		}
 	}
 }

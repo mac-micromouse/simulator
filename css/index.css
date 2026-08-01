@@ -241,3 +241,14 @@ h1 {
 #files-list {
 	display: flex;
 }
+
+.section-header-elem .fa-trash {
+	margin-right: 0 !important;
+	margin-left: 10px;
+	color: #aaa;
+}
+
+.section-header-elem .fa-trash:hover {
+	color: white;
+	font-size: 1.1em;
+}
