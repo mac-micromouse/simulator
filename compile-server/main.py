@@ -42,6 +42,7 @@ async def compile_code(request: CompileRequest):
 			"-O3",
 			"-I/app/include",
 			"-s", "WASM=1",
+			"-s", "ASYNCIFY",
 			"-o", js_path
 		]
 

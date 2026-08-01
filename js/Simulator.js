@@ -1,3 +1,5 @@
+const COMPILE_SERVER_URL = "https://compiler.macmouse.ca/compile";
+
 class Simulator {
 	constructor(ctx) {
 		this.ctx = ctx;
@@ -5,6 +7,12 @@ class Simulator {
 			width: 12,
 			height: 12
 		}, ctx);
+
+		this.interface = new Interface();
+		this.init();
+	}
+
+	init() {
 		this.bot = new Bot(9, 9);
 
 		this.botWorker = new Worker("js/worker.js");
@@ -22,8 +30,6 @@ class Simulator {
 				this.interface.serial.postText(event.data.text);
 			}
 		};
-
-		this.interface = new Interface();
 	}
 
 	loop(currentTime) {
@@ -36,5 +42,33 @@ class Simulator {
 	render() {
 		this.maze.render();
 		this.bot.render(this.ctx);
+	}
+
+	async compileAndDeploy(code) {
+		const response = await fetch(COMPILE_SERVER_URL, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ code })
+		});
+
+		const data = await response.json();
+
+		if (!response.ok) {
+			throw new Error(data.detail || "Error during compilation");
+		}
+
+		if (this.botWorker) {
+			this.botWorker.terminate();
+		}
+
+		this.init();
+		
+		this.botWorker.postMessage({
+			type: "INIT",
+			js: data.js,
+			wasmBase64: data.wasmBase64
+		});
 	}
 }

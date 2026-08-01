@@ -74,7 +74,16 @@ void delay(int ms) {
 }
 
 EM_JS(void, _sendSerialMessage, (const char* str), {
-	postMessage({ type: "SERIAL", text: UTF8ToString(str) });
+	let endPtr = str;
+
+	while (HEAPU8[endPtr] !== 0) {
+		endPtr++;
+	}
+
+	const stringBytes = HEAPU8.subarray(str, endPtr);
+	const decodedText = new TextDecoder("utf-8").decode(stringBytes);
+
+	postMessage({ type: "SERIAL", text: decodedText });
 });
 
 class MockSerial {
