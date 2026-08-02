@@ -2,14 +2,14 @@
 	{
 		"name": "Wall Follower",
 		"desc": "This is some super amazing robot code that totally doesn't run into walls all the time!",
-		"path": "cpp/bot.cpp",
+		"path": "cpp/example-wall_follower.cpp",
 		"complexity": "hard",
 		"saveAs": "example-wall_follower.cpp"
 	},
 	{
 		"name": "Rotator",
 		"desc": "This bot does nothing except rotate in circles all the time. Exciting! Learn about basic motor control.",
-		"path": "cpp/bot.cpp",
+		"path": "cpp/example-rotator.cpp",
 		"complexity": "easy",
 		"saveAs": "example-rotator.cpp"
 	}
