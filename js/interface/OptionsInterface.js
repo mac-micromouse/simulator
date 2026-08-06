@@ -4,17 +4,20 @@ const options = [
 		options: [
 			{
 				id: "width",
-				name: "Width (centimeters)",
+				name: "Width",
+				subtitle: "(centimeters)",
 				default: 9.5
 			},
 			{
 				id: "length",
-				name: "Length (centimeters)",
+				name: "Length",
+				subtitle: "(centimeters)",
 				default: 10
 			},
 			{
 				id: "wheel_radius",
-				name: "Wheel radius (centimeters)",
+				name: "Wheel radius",
+				subtitle: "(centimeters)",
 				default: 2.2
 			}
 		]
@@ -24,42 +27,51 @@ const options = [
 		options: [
 			{
 				id: "in1",
-				name: "IN1 (left motor, pin 1)",
+				name: "IN1",
+				subtitle: "left motor, pin 1",
 				default: 16
 			},
 			{
 				id: "in2",
-				name: "IN2 (left motor, pin 2)",
+				name: "IN2",
+				subtitle: "left motor, pin 2",
 				default: 17
 			},
 			{
 				id: "ena",
-				name: "ENA (enable left motor)",
+				name: "ENA",
+				subtitle: "enable left motor",
 				default: 18
 			},
 			{
 				id: "enc_l_a",
-				name: "ENC_L_A (encoder, left motor)",
-				default: 34
+				name: "ENC_L_A",
+				subtitle: "encoder, left motor",
+				default: 34,
+				break: true
 			},
 			{
 				id: "in3",
-				name: "IN3 (right motor, pin 1)",
+				name: "IN3",
+				subtitle: "right motor, pin 1",
 				default: 19
 			},
 			{
 				id: "in4",
-				name: "IN4 (right motor, pin 2)",
+				name: "IN4",
+				subtitle: "right motor, pin 2",
 				default: 21
 			},
 			{
 				id: "enb",
-				name: "ENB (enable right motor)",
+				name: "ENB",
+				subtitle: "enable right motor",
 				default: 22
 			},
 			{
 				id: "enc_r_a",
-				name: "ENC_R_A (encoder, right motor)",
+				name: "ENC_R_A",
+				subtitle: "encoder, right motor",
 				default: 35
 			}
 		]
@@ -77,15 +89,25 @@ class OptionsInterface {
 			this.container.appendChild(header);
 
 			for (const option of section.options) {
+				const inputContainer = document.createElement("div");
+				inputContainer.classList.add("option");
+
 				const label = document.createElement("label");
 				label.innerText = option.name;
+
+				const subtitle = document.createElement("span");
+				subtitle.innerText = option.subtitle;
 
 				const input = document.createElement("input");
 				input.value = option.default || "";
 				input.name = option.id;
 
-				this.container.appendChild(label);
-				this.container.appendChild(input);
+				inputContainer.append(label, subtitle, input);
+				this.container.appendChild(inputContainer);
+
+				if (option.break) {
+					this.container.append(document.createElement("div"));
+				}
 			}
 		}
 	}

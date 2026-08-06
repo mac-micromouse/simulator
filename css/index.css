@@ -262,9 +262,20 @@ h1 {
 	margin: 10px 0 15px 0;
 	font-size: 1.3em;
 	font-weight: bold;
+	display: block !important;
+	border-bottom: 2px solid #999;
 }
 
 #options-container label {
+	font-weight: bold;
+}
+
+#options-container span {
+	font-size: 0.85em;
+	color: #aaa;
+}
+
+#options-container label, #options-container span {
 	display: block;
 }
 
@@ -276,4 +287,13 @@ h1 {
 	outline: none;
 	border: 2px solid #393e46;
 	border-radius: 5px;
+}
+
+#options-container input:focus {
+	border: 2px solid #4b525f;
+}
+
+.option {
+	display: inline-block;
+	margin-right: 10px;
 }
