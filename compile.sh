@@ -1,1 +1,0 @@
-emcc cpp/bot.cpp -o wasm_bot.js -s ASYNCIFY -O3 && rm -f js/wasm_bot.js js/wasm_bot.wasm && mv wasm_bot.js js && mv wasm_bot.wasm js
