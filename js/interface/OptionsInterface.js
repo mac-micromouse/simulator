@@ -6,19 +6,22 @@ const options = [
 				id: "width",
 				name: "Width",
 				subtitle: "(centimeters)",
-				default: 9.5
+				default: 9.5,
+				type: "float"
 			},
 			{
 				id: "length",
 				name: "Length",
 				subtitle: "(centimeters)",
-				default: 10
+				default: 10,
+				type: "float"
 			},
 			{
 				id: "wheel_radius",
 				name: "Wheel radius",
 				subtitle: "(centimeters)",
-				default: 2.2
+				default: 2.2,
+				type: "float"
 			}
 		]
 	},
@@ -108,6 +111,28 @@ class OptionsInterface {
 				if (option.break) {
 					this.container.append(document.createElement("div"));
 				}
+
+				const check = () => {
+					input.blur();
+
+					if (isNaN(Number(input.value))) {
+						input.style.border = "2px solid #e55";
+						return;
+					}
+
+					if (option.type !== "float") {
+						input.value = Math.floor(Number(input.value));
+					}
+
+					input.style.border = "2px solid #393e46";
+				};
+
+				input.addEventListener("keydown", event => {
+					if (event.key.toLowerCase() === "enter") {
+						input.blur();
+					}
+				});
+				input.addEventListener("blur", check);
 			}
 		}
 	}
