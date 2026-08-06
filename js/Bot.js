@@ -1,8 +1,5 @@
-const DIST_BETWEEN_WHEELS = 95;
-const WHEEL_RADIUS = 22;
 const MAX_SPEED = 15;
 const ENCODER_TICKS_PER_REV = 360;
-const MM_PER_TICK = (2 * Math.PI * WHEEL_RADIUS) / ENCODER_TICKS_PER_REV;
 
 class Bot {
 	constructor(x, y) {
@@ -18,13 +15,11 @@ class Bot {
 		this.pwm = {};
 		this.leftWheelDist = 0;
 		this.rightWheelDist = 0;
-		this.width = 9.5;
-		this.length = 10;
 	}
 
 	update(currentTime) {
-		const leftDir = this.getPin(16) - this.getPin(17);
-		const rightDir = this.getPin(19) - this.getPin(21);
+		const leftDir = this.getPin(simulator.options["in1"]) - this.getPin(simulator.options["in2"]);
+		const rightDir = this.getPin(simulator.options["in3"]) - this.getPin(simulator.options["in4"]);
 
 		const leftPWM = this.getPWM(0) / 255;
 		const rightPWM = this.getPWM(1) / 255;
@@ -37,7 +32,7 @@ class Bot {
 		const distL = velLeft * dt;
 		const distR = velRight * dt;
 		const centerDist = (distL + distR) / 2;
-		const deltaTheta = (distR - distL) / DIST_BETWEEN_WHEELS;
+		const deltaTheta = (distR - distL) / (simulator.options["width"] * 10);
 		const newRotation = this.rotation + deltaTheta;
 		const newX = this.x + centerDist * Math.cos(newRotation), newY = this.y + centerDist * Math.sin(newRotation);
 
@@ -50,6 +45,7 @@ class Bot {
 		this.leftWheelDist += Math.abs(distL);
 		this.rightWheelDist += Math.abs(distR);
 
+		const MM_PER_TICK = (2 * Math.PI * simulator.options["wheel_radius"] * 10) / ENCODER_TICKS_PER_REV;
 		const encoderLeft = (Math.floor(this.leftWheelDist / MM_PER_TICK) % 2 === 0) ? 1 : 0;
 		const encoderRight = (Math.floor(this.rightWheelDist / MM_PER_TICK) % 2 === 0) ? 1 : 0;
 
@@ -87,10 +83,11 @@ class Bot {
 	}
 
 	notHittingWall(x, y, rotation, ctx=null) {
-		const [tlX, tlY] = positionAfterRotation(this.length / 2, -this.width / 2, rotation);
-		const [trX, trY] = positionAfterRotation(this.length / 2, this.width / 2, rotation);
-		const [blX, blY] = positionAfterRotation(-this.length / 2, -this.width / 2, rotation);
-		const [brX, brY] = positionAfterRotation(-this.length / 2, this.width / 2, rotation);
+		const width = simulator.options["width"], length = simulator.options["length"];
+		const [tlX, tlY] = positionAfterRotation(length / 2, -width / 2, rotation);
+		const [trX, trY] = positionAfterRotation(length / 2, width / 2, rotation);
+		const [blX, blY] = positionAfterRotation(-length / 2, -width / 2, rotation);
+		const [brX, brY] = positionAfterRotation(-length / 2, width / 2, rotation);
 
 		const walls = this.getNearbyWallSegments();
 		const botLines = [
@@ -121,13 +118,15 @@ class Bot {
 	}
 
 	render(ctx) {
+		const width = simulator.options["width"], length = simulator.options["length"];
+
 		ctx.save();
 		ctx.translate(this.x * MAZE_GRID_SIZE / 18, this.y * MAZE_GRID_SIZE / 18);
 		ctx.rotate(this.rotation);
 		ctx.fillStyle = "#4b6ba3";
 		ctx.fillRect(
-			-this.length * MAZE_GRID_SIZE / 18 / 2, -this.width * MAZE_GRID_SIZE / 18 / 2,
-			this.length * MAZE_GRID_SIZE / 18, this.width * MAZE_GRID_SIZE / 18
+			-length * MAZE_GRID_SIZE / 18 / 2, -width * MAZE_GRID_SIZE / 18 / 2,
+			length * MAZE_GRID_SIZE / 18, width * MAZE_GRID_SIZE / 18
 		);
 		ctx.restore();
 		this.sensors.forEach(sensor => sensor.render(ctx));

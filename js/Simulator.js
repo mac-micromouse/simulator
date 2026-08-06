@@ -1,20 +1,54 @@
 const COMPILE_SERVER_URL = "https://compiler.macmouse.ca/compile";
 
+const DEFAULT_OPTIONS = {
+	"width": 9.5,
+	"length": 10,
+	"wheel_radius": 2.2,
+	"in1": 16,
+	"in2": 17,
+	"ena": 18,
+	"enc_l_a": 34,
+	"in3": 19,
+	"in4": 21,
+	"enb": 22,
+	"enc_r_a": 35
+};
+
 class Simulator {
 	constructor(ctx) {
+		this.loadOptions();
 		this.ctx = ctx;
 		this.maze = new Maze({
 			width: 12,
 			height: 12
 		}, ctx);
 
-		this.interface = new Interface();
+		this.interface = new Interface(this.options);
 		this.init();
 
 		this.lastCompile = {
 			js: null,
 			wasm: null
 		};
+	}
+
+	loadOptions() {
+		this.options = DEFAULT_OPTIONS;
+
+		if (!localStorage.getItem("simulator-options")) {
+			localStorage.setItem("simulator-options", JSON.stringify(this.options));
+			return;
+		}
+
+		const data = JSON.parse(localStorage.getItem("simulator-options"));
+		for (const key in data) {
+			this.options[key] = data[key];
+		}
+	}
+
+	setOption(key, value) {
+		this.options[key] = value;
+		localStorage.setItem("simulator-options", JSON.stringify(this.options));
 	}
 
 	init() {

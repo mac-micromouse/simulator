@@ -6,21 +6,18 @@ const options = [
 				id: "width",
 				name: "Width",
 				subtitle: "(centimeters)",
-				default: 9.5,
 				type: "float"
 			},
 			{
 				id: "length",
 				name: "Length",
 				subtitle: "(centimeters)",
-				default: 10,
 				type: "float"
 			},
 			{
 				id: "wheel_radius",
 				name: "Wheel radius",
 				subtitle: "(centimeters)",
-				default: 2.2,
 				type: "float"
 			}
 		]
@@ -31,58 +28,50 @@ const options = [
 			{
 				id: "in1",
 				name: "IN1",
-				subtitle: "left motor, pin 1",
-				default: 16
+				subtitle: "left motor, pin 1"
 			},
 			{
 				id: "in2",
 				name: "IN2",
-				subtitle: "left motor, pin 2",
-				default: 17
+				subtitle: "left motor, pin 2"
 			},
 			{
 				id: "ena",
 				name: "ENA",
-				subtitle: "enable left motor",
-				default: 18
+				subtitle: "enable left motor"
 			},
 			{
 				id: "enc_l_a",
 				name: "ENC_L_A",
 				subtitle: "encoder, left motor",
-				default: 34,
 				break: true
 			},
 			{
 				id: "in3",
 				name: "IN3",
-				subtitle: "right motor, pin 1",
-				default: 19
+				subtitle: "right motor, pin 1"
 			},
 			{
 				id: "in4",
 				name: "IN4",
-				subtitle: "right motor, pin 2",
-				default: 21
+				subtitle: "right motor, pin 2"
 			},
 			{
 				id: "enb",
 				name: "ENB",
-				subtitle: "enable right motor",
-				default: 22
+				subtitle: "enable right motor"
 			},
 			{
 				id: "enc_r_a",
 				name: "ENC_R_A",
-				subtitle: "encoder, right motor",
-				default: 35
+				subtitle: "encoder, right motor"
 			}
 		]
 	}
 ];
 
 class OptionsInterface {
-	constructor(container) {
+	constructor(container, simOptions) {
 		this.container = container;
 
 		for (const section of options) {
@@ -102,7 +91,7 @@ class OptionsInterface {
 				subtitle.innerText = option.subtitle;
 
 				const input = document.createElement("input");
-				input.value = option.default || "";
+				input.value = simOptions[option.id] || "";
 				input.name = option.id;
 
 				inputContainer.append(label, subtitle, input);
@@ -125,6 +114,7 @@ class OptionsInterface {
 					}
 
 					input.style.border = "2px solid #393e46";
+					simulator.setOption(option.id, Number(input.value));
 				};
 
 				input.addEventListener("keydown", event => {

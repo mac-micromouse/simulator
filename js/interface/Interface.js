@@ -1,9 +1,9 @@
 class Interface {
-	constructor() {
+	constructor(options) {
 		this.mdConverter = new showdown.Converter();
 		this.serial = new SerialInterface(document.getElementById("serial-interface-log"));
 		this.editor = new EditorInterface(document.getElementById("code-editor"));
-		this.options = new OptionsInterface(document.getElementById("options-container"));
+		this.options = new OptionsInterface(document.getElementById("options-container"), options);
 
 		this.addListeners();
 		this.createExamples();
