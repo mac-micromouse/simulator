@@ -58,9 +58,9 @@
 			</div>
 			<div id="container-right">
 				<div class="section-header">
-					<div class="section-header-items">
-						<div class="section-header-elem selected"><span class="fa fa-bolt"></span> Simulation</div>
-						<div class="section-header-elem"><span class="fa fa-gear"></span> Bot Options</div>
+					<div id="right-top" class="section-header-items">
+						<div class="section-header-elem selected" id="tab-simulation"><span class="fa fa-bolt"></span> Simulation</div>
+						<div class="section-header-elem" id="tab-options"><span class="fa fa-gear"></span> Bot Options</div>
 					</div>
 					<div class="section-header-buttons">
 						<div class="section-header-button" id="button-maze" title="Generate new maze"><span class="fa fa-dice"></span></div>
@@ -68,17 +68,22 @@
 						<div class="section-header-button" id="button-compile" title="Compile and run"><span class="fa fa-play"></span></div>
 					</div>
 				</div>
-				<canvas></canvas>
-				<div id="serial-interface">
-					<div class="section-header">
-						<div class="section-header-items">
-							<div class="section-header-elem selected"><span class="fa fa-terminal"></span> Serial Monitor</div>
+				<div class="right-tab" id="simulation-container">
+					<canvas></canvas>
+					<div id="serial-interface">
+						<div class="section-header">
+							<div class="section-header-items">
+								<div class="section-header-elem selected"><span class="fa fa-terminal"></span> Serial Monitor</div>
+							</div>
+							<div class="section-header-buttons">
+								<div class="section-header-button" id="button-clear" title="Clear serial monitor"><span class="fa fa-trash"></span></div>
+							</div>
 						</div>
-						<div class="section-header-buttons">
-							<div class="section-header-button" id="button-clear" title="Clear serial monitor"><span class="fa fa-trash"></span></div>
-						</div>
+						<div id="serial-interface-log"></div>
 					</div>
-					<div id="serial-interface-log"></div>
+				</div>
+				<div class="right-tab" id="options-container">
+
 				</div>
 			</div>
 		</div>

@@ -51,6 +51,18 @@ class Interface {
 
 		const filePlusButton = document.getElementById("button-add-file");
 		filePlusButton.addEventListener("click", () => this.selectLeftTab(examplesContainer, tabExamples));
+
+		const tabSimulation = document.getElementById("tab-simulation");
+		const tabOptions = document.getElementById("tab-options");
+
+		const simulationContainer = document.getElementById("simulation-container");
+		const optionsContainer = document.getElementById("options-container");
+
+		tabSimulation.addEventListener("click", () => this.selectRightTab(simulationContainer, tabSimulation));
+		tabOptions.addEventListener("click", () => this.selectRightTab(optionsContainer, tabOptions));
+
+		this.selectLeftTab(editorContainer, tabEditor);
+		this.selectRightTab(simulationContainer, tabSimulation);
 	}
 
 	selectLeftTab(tab, button) {
@@ -58,6 +70,16 @@ class Interface {
 		tab.style.display = "block";
 
 		[...document.getElementById("left-top").querySelectorAll(".selected")]
+			.forEach(elem => elem.classList.remove("selected"));
+
+		button.classList.add("selected");
+	}
+	
+	selectRightTab(tab, button) {
+		[...document.querySelectorAll(".right-tab")].forEach(item => item.style.display = "none");
+		tab.style.display = "block";
+
+		[...document.getElementById("right-top").querySelectorAll(".selected")]
 			.forEach(elem => elem.classList.remove("selected"));
 
 		button.classList.add("selected");

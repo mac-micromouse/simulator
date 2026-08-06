@@ -31,7 +31,7 @@ html, body {
 	font-size: 16px;
 }
 
-.left-tab {
+.left-tab, .right-tab {
 	height: calc(100vh - 55px);
 }
 
@@ -157,7 +157,7 @@ canvas, #code-editor, #serial-interface {
 	}
 }
 
-#documentation-container, #examples-container {
+#documentation-container, #examples-container, #options-container {
 	background: #2d2e30;
 	padding: 10px 20px;
 	border-radius: 5px;
