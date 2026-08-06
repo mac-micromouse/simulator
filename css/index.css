@@ -257,3 +257,23 @@ h1 {
 #documentation-container .section {
 	margin-left: 20px;
 }
+
+.options-header {
+	margin: 10px 0 15px 0;
+	font-size: 1.3em;
+	font-weight: bold;
+}
+
+#options-container label {
+	display: block;
+}
+
+#options-container input {
+	margin: 3px 0 10px 0;
+	padding: 6px 10px;
+	background: #36393d;
+	color: white;
+	outline: none;
+	border: 2px solid #393e46;
+	border-radius: 5px;
+}
