@@ -87,7 +87,7 @@ class Interface {
 	}
 
 	async createExamples() {
-		const examplesData = await (await fetch("/cpp/examples.json")).json();
+		const examplesData = await (await fetch("cpp/examples.json")).json();
 		const editorContainer = document.getElementById("examples-listing");
 		
 		for (const example of examplesData) {
@@ -113,7 +113,7 @@ class Interface {
 
 	async createDocumentation() {
 		const documentationContainer = document.getElementById("documentation-container");
-		const docsMd = await (await fetch("/documentation/main.md")).text();
+		const docsMd = await (await fetch("documentation/main.md")).text();
 
 		documentationContainer.innerHTML = this.mdConverter.makeHtml(docsMd);
 		hljs.highlightAll();
