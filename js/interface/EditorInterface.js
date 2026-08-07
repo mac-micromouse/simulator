@@ -83,6 +83,7 @@ int main() {
 		this.renderFileTabs();
 		this.isChanging = true;
 		this.editor.setValue(file.code, -1);
+		this.editor.getSession().getUndoManager().reset();
 		this.isChanging = false;
 	}
 

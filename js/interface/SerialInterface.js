@@ -14,7 +14,7 @@ class SerialInterface {
 				this.currentSpan = span;
 			}
 
-			this.currentSpan.innerText += split[i];
+			this.currentSpan.innerHTML += split[i].replaceAll(" ", "&nbsp;");
 		}
 
 		this.container.scrollTop = this.container.scrollHeight;

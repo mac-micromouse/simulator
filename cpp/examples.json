@@ -1,16 +1,23 @@
 [
 	{
-		"name": "Wall Follower",
-		"desc": "This is some super amazing robot code that totally doesn't run into walls all the time!",
-		"path": "cpp/example-wall_follower.cpp",
-		"complexity": "hard",
-		"saveAs": "example-wall_follower.cpp"
-	},
-	{
 		"name": "Rotator",
 		"desc": "This bot does nothing except rotate in circles all the time. Exciting! Learn about basic motor control.",
 		"path": "cpp/example-rotator.cpp",
 		"complexity": "easy",
 		"saveAs": "example-rotator.cpp"
+	},
+	{
+		"name": "Time of Flight",
+		"desc": "Setup and read from VL53L1X time-of-flight sensors",
+		"path": "cpp/example-time_of_flight.cpp",
+		"complexity": "easy",
+		"saveAs": "example-time_of_flight.cpp"
+	},
+	{
+		"name": "Wall Follower",
+		"desc": "This is some super amazing robot code that totally doesn't run into walls all the time!",
+		"path": "cpp/example-wall_follower.cpp",
+		"complexity": "hard",
+		"saveAs": "example-wall_follower.cpp"
 	}
 ]
