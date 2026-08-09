@@ -5,7 +5,8 @@ self.Module = {
 	tof: [8190, 8190, 8190],
 	pins: {},
 	pwm: {},
-	millis: 0
+	millis: 0,
+	encoderSignals: []
 };
 
 function nativeUtf8ToString(ptr) {
@@ -44,5 +45,9 @@ self.onmessage = (event) => {
 
 		self.Module.pins[ENCODER_LEFT_PIN] = { value: event.data.data.encoderLeft };
 		self.Module.pins[ENCODER_RIGHT_PIN] = { value: event.data.data.encoderRight };
+
+		for (const signal of event.data.data.encoderSignals) {
+			self.Module.encoderSignals.push(signal);
+		}
 	}
 };

@@ -119,18 +119,6 @@ public:
 
 static _MockSerial Serial;
 
-void setup();
-void loop();
-
-int main() {
-	setup();
-	while (1) {
-		loop();
-		delay(1);
-	}
-	return 0;
-}
-
 struct _Interrupt {
 	uint8_t pin;
 	void (*ISR)(void);
@@ -145,4 +133,46 @@ int8_t digitalPinToInterrupt(uint8_t pin) {
 
 void attachInterrupt(uint8_t interrupt, void (*ISR)(void), int mode) {
 	_interrupts.push_back({ interrupt, ISR, mode });
+}
+
+EM_JS(int, _getSignals_internal, (uint8_t* buffer_ptr, int max_signals), {
+	if (!Module.encoderSignals) return 0;
+
+	let count = 0;
+	let ptr = buffer_ptr;
+
+	while (Module.encoderSignals.length > 0 && count < max_signals) {
+		let next = Module.encoderSignals.shift();
+		HEAPU8[ptr++] = next[0];
+		HEAPU8[ptr++] = next[1];
+		count++;
+	}
+
+	return count;
+});
+
+std::vector<std::pair<uint8_t, uint8_t>> _getSignals() {
+	const int MAX_SIGNALS = 64;
+	std::vector<std::pair<uint8_t, uint8_t>> signals(MAX_SIGNALS);
+
+	int signal_count = _getSignals_internal(reinterpret_cast<uint8_t*>(signals.data()), MAX_SIGNALS);
+	signals.resize(signal_count);
+
+	return signals;
+}
+
+void setup();
+void loop();
+
+int main() {
+	setup();
+	while (1) {
+		auto signals = _getSignals();
+		for (auto signal : signals) {
+			Serial.println("Signal gotten: " + std::to_string(signal.first) + ", " + std::to_string(signal.second));
+		}
+		loop();
+		delay(1);
+	}
+	return 0;
 }
