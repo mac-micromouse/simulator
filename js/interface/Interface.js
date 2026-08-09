@@ -17,13 +17,20 @@ class Interface {
 		const buttonClear = document.getElementById("button-clear");
 
 		buttonCompile.addEventListener("click", async () => {
-			buttonCompile.classList.add("disabled");
-			buttonCompile.children[0].classList.replace("fa-play", "fa-spinner");
+			if (buttonCompile.classList.contains("disabled")) {
+				return;
+			}
+
+			if (buttonCompile.children[0].classList.contains("fa-stop")) {
+				if (simulator.botWorker) {
+					simulator.botWorker.terminate();
+					simulator.stopped = true;
+				}
+				buttonCompile.children[0].classList.replace("fa-stop", "fa-play");
+				return;
+			}
 
 			await simulator.compileAndDeploy(this.editor.editor.getValue());
-
-			buttonCompile.classList.remove("disabled");
-			buttonCompile.children[0].classList.replace("fa-spinner", "fa-play");
 		});
 
 		buttonMaze.addEventListener("click", () => {

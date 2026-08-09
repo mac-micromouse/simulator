@@ -131,17 +131,17 @@ int8_t digitalPinToInterrupt(uint8_t pin) {
 	return pin;
 }
 
-void attachInterrupt(uint8_t interrupt, void (*ISR)(void), int mode) {
-	detachInterrupt(interrupt);
-	_interrupts.push_back({ interrupt, ISR, mode });
-}
-
 void detachInterrupt(uint8_t interrupt) {
 	for (int idx = _interrupts.size(); idx > -1; idx--) {
 		if (_interrupts[idx].pin == interrupt) {
 			_interrupts.erase(_interrupts.begin() + idx);
 		}
 	}
+}
+
+void attachInterrupt(uint8_t interrupt, void (*ISR)(void), int mode) {
+	detachInterrupt(interrupt);
+	_interrupts.push_back({ interrupt, ISR, mode });
 }
 
 EM_JS(int, _getSignals_internal, (uint8_t* buffer_ptr, int max_signals), {

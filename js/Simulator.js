@@ -30,6 +30,7 @@ class Simulator {
 			js: null,
 			wasm: null
 		};
+		this.stopped = false;
 	}
 
 	loadOptions() {
@@ -59,6 +60,7 @@ class Simulator {
 		this.bot = new Bot(9, 9);
 
 		this.botWorker = new Worker("js/worker.js");
+		this.stopped = false;
 
 		this.botWorker.onmessage = (event) => {
 			if (event.data.type === "PIN_WRITE") {
@@ -76,7 +78,9 @@ class Simulator {
 	}
 
 	loop(currentTime) {
-		this.bot.update(currentTime);
+		if (!this.stopped) {
+			this.bot.update(currentTime);
+		}
 		this.render();
 
 		window.requestAnimationFrame(this.loop.bind(this));
@@ -88,6 +92,10 @@ class Simulator {
 	}
 
 	async compileAndDeploy(code) {
+		const buttonCompile = document.getElementById("button-compile");
+		buttonCompile.classList.add("disabled");
+		buttonCompile.children[0].classList.replace("fa-play", "fa-spinner");
+
 		this.interface.serial.postText("\nSending code to server...\n");
 
 		const response = await fetch(COMPILE_SERVER_URL, {
@@ -102,6 +110,8 @@ class Simulator {
 
 		if (!response.ok) {
 			this.interface.serial.postText(data.detail ? `Error: ${data.detail}\n\n` : "Error during compilation\n\n");
+			buttonCompile.classList.remove("disabled");
+			buttonCompile.children[0].classList.replace("fa-spinner", "fa-play");
 			return;
 		}
 
@@ -120,6 +130,9 @@ class Simulator {
 			js: data.js,
 			wasm: data.wasmBase64
 		};
+
+		buttonCompile.classList.remove("disabled");
+		buttonCompile.children[0].classList.replace("fa-spinner", "fa-stop");
 	}
 
 	restart() {
