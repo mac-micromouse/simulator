@@ -26,6 +26,34 @@ uint8_t digitalRead(uint8_t pin)
 Reads the current digital value of a pin.
 </div>
 
+## Interrupts
+
+<div class="section">
+```cpp
+int8_t digitalPinToInterrupt(uint8_t pin)
+```
+
+Translates a digital pin number to its specific internal interrupt number.
+
+```cpp
+void attachInterrupt(uint8_t interrupt, void (*ISR)(void), int mode)
+```
+
+Attaches an interrupt service routine (ISR) to the given internal interrupt number (found using the function above). Mode can be RISING, FALLING, or CHANGE.
+
+```cpp
+void detachInterrupt(uint8_t interrupt)
+```
+
+Removes a previously attached ISR.
+
+```cpp
+void updateInterrupts()
+```
+
+Due to the limitations of the simulator, this method must be called whenever you wish to update interrupts in the middle of your loop function.
+</div>
+
 ## PWM (Pulse-Width Modulation)
 
 <div class="section">
