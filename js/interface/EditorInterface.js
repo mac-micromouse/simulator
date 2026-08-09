@@ -12,20 +12,12 @@ class EditorInterface {
 			name: "bot.cpp",
 			code: `#include "micromouse.h"
 
-int setup() {
+void setup() {
     Serial.println("Hello world!");
 }
 
-int loop() {
+void loop() {
 
-}
-
-int main() {
-    setup();
-    while (1) {
-        loop();
-    }
-    return 0;
 }`
 		}];
 		this.currentFile = 0;

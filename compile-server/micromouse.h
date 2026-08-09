@@ -2,11 +2,19 @@
 #include <stdint.h>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #define HIGH 1
 #define LOW 0
 #define INPUT 0
 #define OUTPUT 1
+#define INPUT_PULLUP 2
+
+#define IRAM_ATTR
+
+#define RISING 0
+#define FALLING 1
+#define CHANGE 2
 
 EM_JS(void, pinMode, (uint8_t pin, uint8_t mode), {
 	if (!Module.pins) {
@@ -86,7 +94,7 @@ EM_JS(void, _sendSerialMessage, (const char* str), {
 	postMessage({ type: "SERIAL", text: decodedText });
 });
 
-class MockSerial {
+class _MockSerial {
 public:
 	void begin(long baudRate) {}
 
@@ -109,4 +117,32 @@ public:
 	}
 };
 
-static MockSerial Serial;
+static _MockSerial Serial;
+
+void setup();
+void loop();
+
+int main() {
+	setup();
+	while (1) {
+		loop();
+		delay(1);
+	}
+	return 0;
+}
+
+struct _Interrupt {
+	uint8_t pin;
+	void (*ISR)(void);
+	int mode;
+};
+
+std::vector<_Interrupt> _interrupts;
+
+int8_t digitalPinToInterrupt(uint8_t pin) {
+	return pin;
+}
+
+void attachInterrupt(uint8_t interrupt, void (*ISR)(void), int mode) {
+	_interrupts.push_back({ interrupt, ISR, mode });
+}

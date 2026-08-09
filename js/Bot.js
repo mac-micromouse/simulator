@@ -15,6 +15,8 @@ class Bot {
 		this.pwm = {};
 		this.leftWheelDist = 0;
 		this.rightWheelDist = 0;
+		this.encoderLeft = 0;
+		this.encoderRight = 0;
 	}
 
 	update(currentTime) {
@@ -42,20 +44,36 @@ class Bot {
 			this.rotation = newRotation;
 		}
 
+		const MM_PER_TICK = (2 * Math.PI * simulator.options["wheel_radius"] * 10) / ENCODER_TICKS_PER_REV;
+		let prevEncoderLeft = Math.floor(this.leftWheelDist / MM_PER_TICK);
+		let prevEncoderRight = Math.floor(this.rightWheelDist / MM_PER_TICK);
+
 		this.leftWheelDist += Math.abs(distL);
 		this.rightWheelDist += Math.abs(distR);
 
-		const MM_PER_TICK = (2 * Math.PI * simulator.options["wheel_radius"] * 10) / ENCODER_TICKS_PER_REV;
-		const encoderLeft = (Math.floor(this.leftWheelDist / MM_PER_TICK) % 2 === 0) ? 1 : 0;
-		const encoderRight = (Math.floor(this.rightWheelDist / MM_PER_TICK) % 2 === 0) ? 1 : 0;
+		const currentEncoderLeft = Math.floor(this.leftWheelDist / MM_PER_TICK);
+		const currentEncoderRight = Math.floor(this.rightWheelDist / MM_PER_TICK);
+
+		const encoderSignals = [];
+
+		while (prevEncoderLeft++ < currentEncoderLeft) {
+			encoderSignals.push([0, this.encoderLeft ? 0 : 1]);
+			this.encoderLeft = this.encoderLeft ? 0 : 1;
+		}
+
+		while (prevEncoderRight++ < currentEncoderRight) {
+			encoderSignals.push([1, this.encoderRight ? 0 : 1]);
+			this.encoderRight = this.encoderRight ? 0 : 1;
+		}
 
 		simulator.botWorker.postMessage({
 			type: "UPDATE",
 			data: {
 				tof: this.sensors.map(sensor => sensor.getMeasurement()),
 				millis: Math.floor(currentTime),
-				encoderLeft: encoderLeft,
-				encoderRight: encoderRight
+				encoderLeft: this.encoderLeft,
+				encoderRight: this.encoderRight,
+				encoderSignals: encoderSignals
 			}
 		});
 	}
