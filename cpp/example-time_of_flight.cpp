@@ -43,11 +43,3 @@ void loop() {
 	    + "  Left: " + std::to_string(left) + "  Right: " + std::to_string(right));
 	delay(1000);
 }
-
-int main() {
-	setup();
-	while (true) {
-		loop();
-	}
-	return 0;
-}

@@ -164,13 +164,25 @@ std::vector<std::pair<uint8_t, uint8_t>> _getSignals() {
 void setup();
 void loop();
 
+void updateInterrupts() {
+	auto signals = _getSignals();
+	for (auto signal : signals) {
+		for (_Interrupt& itr : _interrupts) {
+			if (itr.pin == signal.first &&
+				((itr.mode == CHANGE) ||
+				(itr.mode == RISING && signal.second == 1) ||
+				(itr.mode == FALLING && signal.second == 0))
+			) {
+				itr.ISR();
+			}
+		}
+	}
+}
+
 int main() {
 	setup();
 	while (1) {
-		auto signals = _getSignals();
-		for (auto signal : signals) {
-			Serial.println("Signal gotten: " + std::to_string(signal.first) + ", " + std::to_string(signal.second));
-		}
+		updateInterrupts();
 		loop();
 		delay(1);
 	}

@@ -161,11 +161,3 @@ void loop() {
 	stop();
 	delay(100);
 }
-
-int main() {
-	setup();
-	while (true) {
-		loop();
-	}
-	return 0;
-}

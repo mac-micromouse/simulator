@@ -57,12 +57,12 @@ class Bot {
 		const encoderSignals = [];
 
 		while (prevEncoderLeft++ < currentEncoderLeft) {
-			encoderSignals.push([0, this.encoderLeft ? 0 : 1]);
+			encoderSignals.push([simulator.options["enc_l_a"], this.encoderLeft ? 0 : 1]);
 			this.encoderLeft = this.encoderLeft ? 0 : 1;
 		}
 
 		while (prevEncoderRight++ < currentEncoderRight) {
-			encoderSignals.push([1, this.encoderRight ? 0 : 1]);
+			encoderSignals.push([simulator.options["enc_r_a"], this.encoderRight ? 0 : 1]);
 			this.encoderRight = this.encoderRight ? 0 : 1;
 		}
 

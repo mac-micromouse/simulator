@@ -6,6 +6,7 @@ class EditorInterface {
 		this.editor.container.style.lineHeight = 1.4;
 		this.editor.renderer.updateFontSize();
 		this.editor.session.setMode("ace/mode/c_cpp");
+		this.editor.setOption("scrollPastEnd", 1);
 		this.isChanging = false;
 
 		this.files = [{

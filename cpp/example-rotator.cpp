@@ -70,11 +70,3 @@ void loop() {
 	turnLeft(255);
 	delay(2000);
 }
-
-int main() {
-	setup();
-	while (true) {
-		loop();
-	}
-	return 0;
-}
