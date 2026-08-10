@@ -54,6 +54,8 @@ void loop() {
 
 			item.innerText = this.files[i].name;
 
+			item.innerHTML += `<span class="fa fa-download"></span>`;
+
 			if (i !== 0) {
 				item.innerHTML += `<span class="fa fa-trash"></span>`;
 				item.querySelector(".fa-trash")
@@ -62,6 +64,12 @@ void loop() {
 						this.removeFile(this.files[i].name);
 					});
 			}
+
+			item.querySelector(".fa-download")
+				.addEventListener("click", (event) => {
+					event.stopPropagation();
+					downloadFile(this.files[i].code, this.files[i].name, "text/x-c++src");
+				});
 
 			filesList.appendChild(item);
 
@@ -81,12 +89,13 @@ void loop() {
 	}
 
 	addFile(name, code) {
+		const baseName = name.split(".")[0];
 		let fileNum = 0;
-		while (this.files.filter(f => f.name === `${name}${fileNum ? ` (${fileNum})` : ""}`).length > 0) {
+		while (this.files.filter(f => f.name === `${baseName}${fileNum ? ` (${fileNum})` : ""}.cpp`).length > 0) {
 			fileNum++;
 		}
 
-		name = `${name}${fileNum ? ` (${fileNum})` : ""}`
+		name = `${baseName}${fileNum ? ` (${fileNum})` : ""}.cpp`;
 		this.files.push({ name, code });
 		this.switchFile(name);
 	}

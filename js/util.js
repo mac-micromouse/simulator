@@ -33,3 +33,17 @@ function positionAfterRotation(x, y, rotation) {
 		x * Math.sin(rotation) + y * Math.cos(rotation)
 	];
 }
+
+function downloadFile(content, fileName, contentType) {
+	const blob = new Blob([content], { type: contentType });
+	const url = URL.createObjectURL(blob);
+
+	const link = document.createElement("a");
+	link.href = url;
+	link.download = fileName;
+
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
+	URL.revokeObjectURL(url);
+}
