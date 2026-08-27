@@ -139,3 +139,21 @@ Serial.println()
 
 Sends an empty newline.
 </div>
+
+## Simulator-Specific
+
+<div class="section">
+These methods are not present in an actual ESP32, but are included for convenience when developing algorithms using the simulator.
+
+```cpp
+placeWall(uint8_t cell_x, uint8_t cell_y, uint8_t dir)
+```
+
+Adds an invisible "wall" in the simulator, so you can see where your bot thinks the walls are. The top-left cell is (0, 0), and the bottom-right is (n - 1, n - 1), where n is the size of the maze. dir is which wall to place: 0 is top, 1 is right, 2 is bottom, 3 is left.
+
+```cpp
+removeWall(uint8_t cell_x, uint8_t cell_y, uint8_t dir)
+```
+
+Opposite of placeWall.
+</div>
