@@ -1,4 +1,4 @@
-const MAX_SPEED = 15;
+const MAX_SPEED = 170;
 const ENCODER_TICKS_PER_REV = 360;
 
 class Bot {
@@ -19,15 +19,15 @@ class Bot {
 		this.encoderRight = 0;
 	}
 
-	update(currentTime) {
+	update(currentTime, delta) {
 		const leftDir = this.getPin(simulator.options["in1"]) - this.getPin(simulator.options["in2"]);
 		const rightDir = this.getPin(simulator.options["in3"]) - this.getPin(simulator.options["in4"]);
 
 		const leftPWM = this.getPWM(0) / 255;
 		const rightPWM = this.getPWM(1) / 255;
 
-		const velLeft = leftDir * leftPWM * MAX_SPEED;
-		const velRight = rightDir * rightPWM * MAX_SPEED;
+		const velLeft = leftDir * leftPWM * MAX_SPEED * delta;
+		const velRight = rightDir * rightPWM * MAX_SPEED * delta;
 
 		const dt = 60 / 1000;
 

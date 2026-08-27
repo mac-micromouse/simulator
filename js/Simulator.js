@@ -31,6 +31,7 @@ class Simulator {
 			wasm: null
 		};
 		this.stopped = false;
+		this.lastFrameTime = performance.now();
 	}
 
 	loadOptions() {
@@ -58,6 +59,7 @@ class Simulator {
 		}
 
 		this.bot = new Bot(9, 9);
+		this.maze.reset();
 
 		this.botWorker = new Worker("js/worker.js");
 		this.stopped = false;
@@ -74,12 +76,23 @@ class Simulator {
 			if (event.data.type === "SERIAL") {
 				this.interface.serial.postText(event.data.text);
 			}
+
+			if (event.data.type === "PLACE_WALL") {
+				this.maze.setBuildWall(event.data.cell_x, event.data.cell_y, event.data.dir, 1);
+			}
+
+			if (event.data.type === "REMOVE_WALL") {
+				this.maze.setBuildWall(event.data.cell_x, event.data.cell_y, event.data.dir, 0);
+			}
 		};
 	}
 
 	loop(currentTime) {
+		const elapsed = performance.now() - this.lastFrameTime;
+		const delta = elapsed / (1000 / 60);
+		this.lastFrameTime = performance.now();
 		if (!this.stopped) {
-			this.bot.update(currentTime);
+			this.bot.update(currentTime, delta);
 		}
 		this.render();
 

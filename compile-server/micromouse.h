@@ -81,6 +81,14 @@ void delay(int ms) {
     emscripten_sleep(ms);
 }
 
+EM_JS(void, placeWall, (uint8_t cell_x, uint8_t cell_y, uint8_t dir), {
+	postMessage({ type: "PLACE_WALL", cell_x: cell_x, cell_y: cell_y, dir: dir });
+});
+
+EM_JS(void, removeWall, (uint8_t cell_x, uint8_t cell_y, uint8_t dir), {
+	postMessage({ type: "REMOVE_WALL", cell_x: cell_x, cell_y: cell_y, dir: dir });
+});
+
 EM_JS(void, _sendSerialMessage, (const char* str), {
 	let endPtr = str;
 

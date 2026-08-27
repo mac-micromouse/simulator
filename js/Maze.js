@@ -124,6 +124,31 @@ class Maze {
 	isInBounds(x, y) {
 		return x >= 0 && y >= 0 && x <= this.width - 1 && y <= this.height - 1;
 	}
+
+	setBuildWall(nodeX, nodeY, dir, value) {
+		if (nodeX < 0 || nodeY < 0 || nodeX > this.width - 1 || nodeY > this.height - 1 || dir < 0 || dir > 3) {
+			return;
+		}
+
+		this.nodes[nodeX][nodeY].built[dir] = value;
+
+		const dirOffset = [[0, -1], [1, 0], [0, 1], [-1, 0]][dir];
+		const neighbourX = nodeX + dirOffset[0], neighbourY = nodeY + dirOffset[1];
+
+		if (neighbourX < 0 || neighbourY < 0 || neighbourX > this.width - 1 || neighbourY > this.height - 1) {
+			return;
+		}
+
+		this.nodes[neighbourX][neighbourY].built[[2, 3, 0, 1][dir]] = value;
+	}
+
+	reset() {
+		for (let x = 0; x < this.width; x++) {
+			for (let y = 0; y < this.height; y++) {
+				this.nodes[x][y].built = [0, 0, 0, 0];
+			}
+		}
+	}
 }
 
 class MazeNode {
@@ -131,6 +156,7 @@ class MazeNode {
 		this.x = x;
 		this.y = y;
 		this.walls = [1, 1, 1, 1];
+		this.built = [0, 0, 0, 0];
 		this.highlightedWalls = [0, 0, 0, 0];
 		this.previous = null;
 		this.isGoal = isGoal;
@@ -183,7 +209,7 @@ class MazeNode {
 		}
 
 		const drawLine = (x1, y1, x2, y2, highlighted) => {
-			ctx.strokeStyle = highlighted > performance.now() ? "red" : "black";
+			ctx.strokeStyle = highlighted > performance.now() ? "red" : "#aaa";
 			ctx.lineWidth = 4;
 			ctx.beginPath();
 			ctx.moveTo(this.x * MAZE_GRID_SIZE + x1 + 2, this.y * MAZE_GRID_SIZE + y1 + 2);
@@ -198,8 +224,8 @@ class MazeNode {
 	}
 
 	renderHighlightedWalls(ctx) {
-		const drawLine = (x1, y1, x2, y2) => {
-			ctx.strokeStyle = "red";
+		const drawLine = (x1, y1, x2, y2, color) => {
+			ctx.strokeStyle = color;
 			ctx.lineWidth = 4;
 			ctx.beginPath();
 			ctx.moveTo(this.x * MAZE_GRID_SIZE + x1 + 2, this.y * MAZE_GRID_SIZE + y1 + 2);
@@ -207,9 +233,14 @@ class MazeNode {
 			ctx.stroke();
 		};
 
-		if (this.walls[0] && this.highlightedWalls[0] > performance.now()) drawLine(0, 0, MAZE_GRID_SIZE, 0);
-		if (this.walls[1] && this.highlightedWalls[1] > performance.now()) drawLine(MAZE_GRID_SIZE, 0, MAZE_GRID_SIZE, MAZE_GRID_SIZE);
-		if (this.walls[2] && this.highlightedWalls[2] > performance.now()) drawLine(0, MAZE_GRID_SIZE, MAZE_GRID_SIZE, MAZE_GRID_SIZE);
-		if (this.walls[3] && this.highlightedWalls[3] > performance.now()) drawLine(0, 0, 0, MAZE_GRID_SIZE);
+		if (this.built[0]) drawLine(0, 0, MAZE_GRID_SIZE, 0, this.walls[0] ? "black" : "rgb(228, 37, 78)");
+		if (this.built[1]) drawLine(MAZE_GRID_SIZE, 0, MAZE_GRID_SIZE, MAZE_GRID_SIZE, this.walls[1] ? "black" : "rgb(228, 37, 78)");
+		if (this.built[2]) drawLine(0, MAZE_GRID_SIZE, MAZE_GRID_SIZE, MAZE_GRID_SIZE, this.walls[2] ? "black" : "rgb(228, 37, 78)");
+		if (this.built[3]) drawLine(0, 0, 0, MAZE_GRID_SIZE, this.walls[3] ? "black" : "rgb(228, 37, 78)");
+
+		if (this.walls[0] && this.highlightedWalls[0] > performance.now()) drawLine(0, 0, MAZE_GRID_SIZE, 0, "red");
+		if (this.walls[1] && this.highlightedWalls[1] > performance.now()) drawLine(MAZE_GRID_SIZE, 0, MAZE_GRID_SIZE, MAZE_GRID_SIZE, "red");
+		if (this.walls[2] && this.highlightedWalls[2] > performance.now()) drawLine(0, MAZE_GRID_SIZE, MAZE_GRID_SIZE, MAZE_GRID_SIZE, "red");
+		if (this.walls[3] && this.highlightedWalls[3] > performance.now()) drawLine(0, 0, 0, MAZE_GRID_SIZE, "red");
 	}
 }
