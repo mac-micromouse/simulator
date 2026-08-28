@@ -11,7 +11,9 @@ const DEFAULT_OPTIONS = {
 	"in3": 19,
 	"in4": 21,
 	"enb": 22,
-	"enc_r_a": 35
+	"enc_r_a": 35,
+	"tof_l_deg": 90,
+	"tof_r_deg": 90
 };
 
 class Simulator {
@@ -58,7 +60,7 @@ class Simulator {
 			this.botWorker.terminate();
 		}
 
-		this.bot = new Bot(9, 9);
+		this.bot = new Bot(9, 9, this);
 		this.maze.reset();
 
 		this.botWorker = new Worker("js/worker.js");

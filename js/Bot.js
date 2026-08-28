@@ -2,14 +2,14 @@ const MAX_SPEED = 170;
 const ENCODER_TICKS_PER_REV = 360;
 
 class Bot {
-	constructor(x, y) {
+	constructor(x, y, sim) {
 		this.x = x;
 		this.y = y;
 		this.rotation = 0;
 		this.sensors = [
 			new Sensor(this, 0, 5, 0),
-			new Sensor(this, -Math.PI / 2, 0, -3),
-			new Sensor(this, Math.PI / 2, 0, 3)
+			new Sensor(this, -sim.options["tof_l_deg"] * Math.PI / 180, 0, -3),
+			new Sensor(this, sim.options["tof_r_deg"] * Math.PI / 180, 0, 3)
 		];
 		this.pins = {};
 		this.pwm = {};

@@ -67,6 +67,21 @@ const options = [
 				subtitle: "encoder, right motor"
 			}
 		]
+	},
+	{
+		name: "Sensors",
+		options: [
+			{
+				id: "tof_l_deg",
+				name: "Left ToF angle",
+				subtitle: "(degrees)"
+			},
+			{
+				id: "tof_r_deg",
+				name: "Right ToF angle",
+				subtitle: "(degrees)"
+			}
+		]
 	}
 ];
 
