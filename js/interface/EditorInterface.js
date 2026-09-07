@@ -150,9 +150,14 @@ void loop() {
 		input.focus();
 
 		const setName = () => {
+			if (input.value === fileNameSpan.innerText) {
+				this.renderFileTabs();
+			}
+
 			if (this.files.filter(file => file.name === input.value).length > 0) {
 				return;
 			}
+
 			this.files.filter(file => file.name === fileNameSpan.innerText)[0]
 				.name = input.value;
 			this.renderFileTabs();
