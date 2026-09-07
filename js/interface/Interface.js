@@ -30,7 +30,9 @@ class Interface {
 				return;
 			}
 
-			await simulator.compileAndDeploy(this.editor.editor.getValue());
+			const files = this.editor.files;
+			files[this.editor.currentFile].code = this.editor.editor.getValue();
+			await simulator.compileAndDeploy(files);
 		});
 
 		buttonMaze.addEventListener("click", () => {
@@ -58,7 +60,9 @@ class Interface {
 		tabExamples.addEventListener("click", () => this.selectLeftTab(examplesContainer, tabExamples));
 
 		const filePlusButton = document.getElementById("button-add-file");
-		filePlusButton.addEventListener("click", () => this.selectLeftTab(examplesContainer, tabExamples));
+		filePlusButton.addEventListener("click", () => {
+			this.editor.addFile("untitled", "");
+		});
 
 		const tabSimulation = document.getElementById("tab-simulation");
 		const tabOptions = document.getElementById("tab-options");

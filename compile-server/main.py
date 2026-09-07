@@ -6,6 +6,7 @@ import asyncio
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from werkzeug.utils import secure_filename
 
 app = FastAPI()
 
@@ -17,28 +18,37 @@ app.add_middleware(
 	allow_headers=["*"],
 )
 
-class CompileRequest(BaseModel):
+class CompileFile(BaseModel):
+	name: str
 	code: str
+
+class CompileRequest(BaseModel):
+	files: list[CompileFile]
 
 @app.post("/compile")
 async def compile_code(request: CompileRequest):
-	if not request.code:
-		raise HTTPException(status_code=400, detail="No code provided")
+	if not request.files:
+		raise HTTPException(status_code=400, detail="No files provided")
 
 	job_id = str(uuid.uuid4())
 	work_dir = f"/tmp/{job_id}"
 	os.makedirs(work_dir, exist_ok=True)
 
-	source_path = os.path.join(work_dir, "main.cpp")
 	js_path = os.path.join(work_dir, "main.js")
 	wasm_path = os.path.join(work_dir, "main.wasm")
 
 	try:
-		with open(source_path, "w") as f:
-			f.write(request.code)
+		all_paths = []
+
+		for included_file in request.files:
+			source_path = os.path.join(work_dir, secure_filename(included_file.name))
+			all_paths.append(source_path)
+
+			with open(source_path, "w") as f:
+				f.write(included_file.code)
 
 		emcc_cmd = [
-			"emcc", source_path,
+			"emcc", *[f for f in all_paths if f.endswith(".cpp")], "/app/include/micromouse.cpp",
 			"-O3",
 			"-I/app/include",
 			"-s", "WASM=1",

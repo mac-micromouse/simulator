@@ -1,5 +1,6 @@
 test/
 .vscode/
+bots/
 
 wasm_bot.js
 wasm_bot.wasm

@@ -106,7 +106,7 @@ class Simulator {
 		this.bot.render(this.ctx);
 	}
 
-	async compileAndDeploy(code) {
+	async compileAndDeploy(files) {
 		const buttonCompile = document.getElementById("button-compile");
 		buttonCompile.classList.add("disabled");
 		buttonCompile.children[0].classList.replace("fa-play", "fa-spinner");
@@ -118,7 +118,7 @@ class Simulator {
 			headers: {
 				"Content-Type": "application/json"
 			},
-			body: JSON.stringify({ code })
+			body: JSON.stringify({ files })
 		});
 
 		const data = await response.json();
