@@ -52,16 +52,27 @@ void loop() {
 				item.classList.add("selected");
 			}
 
-			item.innerText = this.files[i].name;
-
-			item.innerHTML += `<span class="fa fa-download"></span>`;
+			item.innerHTML = `
+				<span class="file-name">${this.files[i].name}</span>
+				<span class="fa fa-download"></span>
+			`;
 
 			if (i !== 0) {
-				item.innerHTML += `<span class="fa fa-trash"></span>`;
+				item.innerHTML += `
+					<span class="fa fa-edit"></span>
+					<span class="fa fa-trash"></span>
+				`;
+
 				item.querySelector(".fa-trash")
 					.addEventListener("click", (event) => {
 						event.stopPropagation();
 						this.removeFile(this.files[i].name);
+					});
+
+				item.querySelector(".fa-edit")
+					.addEventListener("click", (event) => {
+						event.stopPropagation();
+						this.createEditFileNameInput(item);
 					});
 			}
 
@@ -126,5 +137,37 @@ void loop() {
 			saveButton.title = "Saved!";
 			saveButton.style.color = "rgb(100, 230, 100)";
 		}, 3000);
+	}
+
+	createEditFileNameInput(elem) {
+		const fileNameSpan = elem.querySelector(".file-name");
+		fileNameSpan.style.display = "none";
+
+		const input = document.createElement("input");
+		input.classList.add("file-name-input");
+		input.value = fileNameSpan.innerText;
+		elem.insertBefore(input, fileNameSpan);
+		input.focus();
+
+		const setName = () => {
+			if (this.files.filter(file => file.name === input.value).length > 0) {
+				return;
+			}
+			this.files.filter(file => file.name === fileNameSpan.innerText)[0]
+				.name = input.value;
+			this.renderFileTabs();
+		};
+
+		input.addEventListener("click", event => event.stopPropagation());
+		input.addEventListener("blur", () => setName());
+		input.addEventListener("keydown", event => {
+			if (event.key.toLowerCase() === "enter") {
+				setName();
+			}
+
+			if (event.key.toLowerCase() === "escape") {
+				this.renderFileTabs();
+			}
+		});
 	}
 }

@@ -309,3 +309,17 @@ h1 {
 	top: 1px;
 	left: 1px;
 }
+
+.file-name-input {
+	outline: none;
+	border: 1px solid #282a2e;
+	border-radius: 5px;
+	background: #3d3f44;
+	color: white;
+	font-size: 0.9em;
+	padding: 2px 4px;
+}
+
+.section-header-elem:has(.file-name-input) {
+	padding-left: 3px !important;
+}
