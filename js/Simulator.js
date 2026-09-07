@@ -34,6 +34,7 @@ class Simulator {
 		};
 		this.stopped = false;
 		this.lastFrameTime = performance.now();
+		this.lastRenderTime = 0;
 	}
 
 	loadOptions() {
@@ -90,15 +91,21 @@ class Simulator {
 	}
 
 	loop(currentTime) {
+		const startTime = performance.now();
 		const elapsed = performance.now() - this.lastFrameTime;
 		const delta = elapsed / (1000 / 60);
 		this.lastFrameTime = performance.now();
+
 		if (!this.stopped) {
 			this.bot.update(currentTime, delta);
 		}
-		this.render();
 
-		window.requestAnimationFrame(this.loop.bind(this));
+		if (performance.now() - this.lastRenderTime > 1000 / 30) {
+			this.render();
+			this.lastRenderTime = performance.now();
+		}
+
+		window.setTimeout(this.loop.bind(this), 1000 / 200 - (performance.now() - startTime));
 	}
 
 	render() {
