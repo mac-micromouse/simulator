@@ -75,6 +75,12 @@ class Interface {
 
 		this.selectLeftTab(editorContainer, tabEditor);
 		this.selectRightTab(simulationContainer, tabSimulation);
+
+		window.addEventListener("keydown", event => {
+			if (event.key.toLowerCase() === "s" && (event.ctrlKey || event.metaKey)) {
+				event.preventDefault();
+			}
+		});
 	}
 
 	selectLeftTab(tab, button) {
