@@ -82,6 +82,15 @@ public:
 
 static _MockSerial Serial;
 
+class _MockWire {
+public:
+	void begin(int sda, int scl) {}
+	void setClock(uint32_t clockFrequency) {}
+	void end() {}
+};
+
+static _MockWire Wire;
+
 struct _Interrupt {
 	uint8_t pin;
 	void (*ISR)(void);
