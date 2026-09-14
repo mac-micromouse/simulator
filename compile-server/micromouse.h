@@ -33,16 +33,20 @@ void delay(int ms);
 
 class VL53L1X {
 private:
+	static int cur_sim_id;
 	int _id;
 public:
 	enum DistanceMode { Short, Medium, Long };
 
-	VL53L1X(int sim_id) : _id(sim_id) {}
+	VL53L1X() {
+		this->_id = cur_sim_id++;
+	}
 
 	bool init() { return true; }
 	void setTimeout(uint16_t timeout) {}
 	bool setDistanceMode(DistanceMode mode) { return true; }
 	void startContinuous(uint32_t period_ms) {}
+	void setAddress(uint32_t address) {}
 	bool dataReady() { return true; }
 
 	uint16_t read() {

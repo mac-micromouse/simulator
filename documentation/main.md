@@ -90,10 +90,10 @@ Pauses execution for a specified number of milliseconds.
 
 <div class="section">
 ```cpp
-VL53L1X(int sim_id)
+VL53L1X()
 ```
 
-Constructor for the mock sensor class. Takes a `sim_id`, mapping the C++ object to the virtual sensor.
+Constructor for the mock sensor class.
 
 ```cpp
 uint16_t read()
@@ -107,6 +107,7 @@ void setTimeout(uint16_t timeout)
 bool setDistanceMode(DistanceMode mode)
 void startContinuous(uint32_t period_ms)
 bool dataReady()
+void setAddress(uint32_t address)
 ```
 
 Methods included for compatibility. These functions have no effect in the simulator.
