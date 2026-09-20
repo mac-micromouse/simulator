@@ -6,6 +6,7 @@
 #include <vector>
 #include <utility>
 
+#define MM_SIMULATOR
 #define HIGH 1
 #define LOW 0
 #define INPUT 0
@@ -23,7 +24,7 @@ void pinMode(uint8_t pin, uint8_t mode);
 void digitalWrite(uint8_t pin, uint8_t val);
 uint8_t digitalRead(uint8_t pin);
 void ledcAttach(uint8_t pin, uint32_t freq, uint8_t resolution);
-void ledcWrite(uint8_t channel, uint32_t duty);
+void ledcWrite(uint8_t pin, uint32_t duty);
 unsigned long millis();
 
 uint16_t _readToF(int sensor_id);

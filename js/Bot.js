@@ -23,8 +23,8 @@ class Bot {
 		const leftDir = this.getPin(simulator.options["in1"]) - this.getPin(simulator.options["in2"]);
 		const rightDir = this.getPin(simulator.options["in3"]) - this.getPin(simulator.options["in4"]);
 
-		const leftPWM = this.getPWM(0) / 255;
-		const rightPWM = this.getPWM(1) / 255;
+		const leftPWM = this.getPWM(simulator.options["ena"]) / 255;
+		const rightPWM = this.getPWM(simulator.options["enb"]) / 255;
 
 		const velLeft = leftDir * leftPWM * MAX_SPEED * delta;
 		const velRight = rightDir * rightPWM * MAX_SPEED * delta;

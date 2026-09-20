@@ -27,10 +27,10 @@ EM_JS(void, ledcAttach, (uint8_t pin, uint32_t freq, uint8_t resolution), {
 	Module.pwm[Object.keys(Module.pwm).length] = { pin: pin, duty: 0 };
 });
 
-EM_JS(void, ledcWrite, (uint8_t channel, uint32_t duty), {
-	if (Module.pwm && Module.pwm[channel]) {
-		Module.pwm[channel].duty = duty;
-		postMessage({ type: "PWM_WRITE", channel: channel, duty: duty });
+EM_JS(void, ledcWrite, (uint8_t pin, uint32_t duty), {
+	if (Module.pwm && Module.pwm[pin]) {
+		Module.pwm[pin].duty = duty;
+		postMessage({ type: "PWM_WRITE", pin: pin, duty: duty });
 	}
 });
 

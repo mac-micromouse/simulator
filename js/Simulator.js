@@ -73,7 +73,7 @@ class Simulator {
 			}
 
 			if (event.data.type === "PWM_WRITE") {
-				this.bot.pwm[event.data.channel] = event.data.duty;
+				this.bot.pwm[event.data.pin] = event.data.duty;
 			}
 
 			if (event.data.type === "SERIAL") {
