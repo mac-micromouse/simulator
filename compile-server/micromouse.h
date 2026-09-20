@@ -22,7 +22,7 @@ extern "C" {
 void pinMode(uint8_t pin, uint8_t mode);
 void digitalWrite(uint8_t pin, uint8_t val);
 uint8_t digitalRead(uint8_t pin);
-void ledcAttachPin(uint8_t pin, uint8_t channel);
+void ledcAttach(uint8_t pin, uint32_t freq, uint8_t resolution);
 void ledcWrite(uint8_t channel, uint32_t duty);
 unsigned long millis();
 

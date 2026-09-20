@@ -19,12 +19,12 @@ EM_JS(uint8_t, digitalRead, (uint8_t pin), {
 	return (Module.pins && Module.pins[pin]) ? Module.pins[pin].value : 0;
 });
 
-EM_JS(void, ledcAttachPin, (uint8_t pin, uint8_t channel), {
+EM_JS(void, ledcAttach, (uint8_t pin, uint32_t freq, uint8_t resolution), {
 	if (!Module.pwm) {
 		Module.pwm = {};
 	}
 
-	Module.pwm[channel] = { pin: pin, duty: 0 };
+	Module.pwm[Object.keys(Module.pwm).length] = { pin: pin, duty: 0 };
 });
 
 EM_JS(void, ledcWrite, (uint8_t channel, uint32_t duty), {
