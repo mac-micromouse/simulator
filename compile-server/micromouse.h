@@ -89,6 +89,7 @@ static _MockSerial Serial;
 
 class _MockWire {
 public:
+	void begin() {}
 	void begin(int sda, int scl) {}
 	void setClock(uint32_t clockFrequency) {}
 	void end() {}
