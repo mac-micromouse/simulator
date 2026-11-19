@@ -10,12 +10,27 @@ html, body {
 	box-sizing: border-box;
 }
 
+#serial-interface {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-height: 0;
+	margin-top: 5px;
+	overflow: hidden;
+}
+
+#serial-interface .section-header {
+	flex-shrink: 0;
+	margin-bottom: 5px;
+}
+
 #serial-interface-log {
 	font-family: monospace;
 	padding: 5px 10px;
 	background: #2d2e30;
 	color: white;
-	height: calc(100vh - 709px);
+	flex: 1;
+	min-height: 0;
 	overflow: auto;
 	border-radius: 5px;
 }
@@ -28,12 +43,13 @@ html, body {
 #editor-container {
 	display: flex;
 	height: calc(100vh - 55px);
-	gap: 5px;
+	gap: 0;
 }
 
 #projects-sidebar {
 	width: 190px;
-	min-width: 190px;
+	min-width: 150px;
+	max-width: 300px;
 	height: 100%;
 	background: #2d2e30;
 	border-radius: 5px;
@@ -320,17 +336,90 @@ html, body {
 
 #container {
 	display: flex;
+	height: 100vh;
+	overflow: hidden;
 }
 
 #container-left {
-	width: calc(100% - 614px);
+	flex: 1;
+	min-width: 300px;
 	height: calc(100vh - 10px);
-	margin: 5px;
+	margin: 5px 0 5px 5px;
 }
 
 #container-right {
-	width: 614px;
-	margin: 5px;
+	width: 604px;
+	flex-shrink: 0;
+	margin: 5px 5px 5px 0;
+	container-type: inline-size;
+}
+
+#simulation-container {
+	display: flex;
+	flex-direction: column;
+	height: calc(100vh - 55px);
+	overflow: hidden;
+}
+
+#simulation-container canvas {
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	max-height: 60vh;
+	min-width: 300px;
+	min-height: 300px;
+	display: block;
+	flex-shrink: 0;
+	margin: 0 auto;
+}
+
+.resizer-col {
+	cursor: col-resize;
+	user-select: none;
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	z-index: 10;
+	touch-action: none;
+}
+
+#resizer-sidebar {
+	width: 8px;
+}
+
+#resizer-main {
+	width: 10px;
+}
+
+.resizer-col::after {
+	content: '';
+	width: 2px;
+	height: 36px;
+	background: #3c4045;
+	border-radius: 2px;
+	transition: background 0.15s, height 0.15s, width 0.15s;
+}
+
+.resizer-col:hover::after,
+.resizer-col.resizing::after {
+	background: #61afef;
+	width: 4px;
+	height: 60px;
+}
+
+@container (max-width: 380px) {
+	#container-right .section-header-button {
+		width: 30px;
+		margin-left: 2px;
+		margin-right: 2px;
+	}
+	#container-right .section-header-elem {
+		padding: 3px 6px;
+		margin-left: 2px;
+		margin-right: 2px;
+		font-size: 0.82em;
+	}
 }
 
 .section-header {

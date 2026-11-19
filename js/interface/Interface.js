@@ -8,6 +8,7 @@ class Interface {
 		this.addListeners();
 		this.createExamples();
 		this.createDocumentation();
+		this.initResizers();
 	}
 
 	addListeners() {
@@ -107,12 +108,174 @@ class Interface {
 	
 	selectRightTab(tab, button) {
 		[...document.querySelectorAll(".right-tab")].forEach(item => item.style.display = "none");
-		tab.style.display = "block";
+		tab.style.display = tab.id === "simulation-container" ? "flex" : "block";
 
 		[...document.getElementById("right-top").querySelectorAll(".selected")]
 			.forEach(elem => elem.classList.remove("selected"));
 
 		button.classList.add("selected");
+	}
+
+	initResizers() {
+		const projectsSidebar = document.getElementById("projects-sidebar");
+		const resizerSidebar = document.getElementById("resizer-sidebar");
+		const containerLeft = document.getElementById("container-left");
+		const containerRight = document.getElementById("container-right");
+		const resizerMain = document.getElementById("resizer-main");
+		const canvas = document.querySelector("#simulation-container canvas");
+
+		const MIN_SIDEBAR = 150;
+		const MAX_SIDEBAR = 300;
+		const MIN_CANVAS = 300;
+
+		const getMaxCanvasSize = () => {
+			return Math.max(MIN_CANVAS, Math.floor(window.innerHeight * 0.6));
+		};
+
+		this.setSimulationWidth = (desiredWidth) => {
+			const maxCanvas = getMaxCanvasSize();
+			const maxByWindow = Math.max(MIN_CANVAS, window.innerWidth - 320);
+			const effectiveMax = Math.min(maxCanvas, maxByWindow);
+			const clamped = Math.max(MIN_CANVAS, Math.min(effectiveMax, Math.round(desiredWidth)));
+
+			if (containerRight) {
+				containerRight.style.width = clamped + "px";
+			}
+			if (canvas) {
+				canvas.style.width = clamped + "px";
+				canvas.style.height = clamped + "px";
+			}
+
+			if (this.editor && this.editor.editor) {
+				this.editor.editor.resize();
+			}
+
+			return clamped;
+		};
+
+		this.setSidebarWidth = (desiredWidth) => {
+			const clamped = Math.max(MIN_SIDEBAR, Math.min(MAX_SIDEBAR, Math.round(desiredWidth)));
+			if (projectsSidebar) {
+				projectsSidebar.style.width = clamped + "px";
+			}
+
+			if (this.editor && this.editor.editor) {
+				this.editor.editor.resize();
+			}
+
+			return clamped;
+		};
+
+		// Initial load from storage or default
+		const savedSidebarWidth = parseFloat(localStorage.getItem("simulator-sidebar-width"));
+		if (!isNaN(savedSidebarWidth)) {
+			this.setSidebarWidth(savedSidebarWidth);
+		} else {
+			this.setSidebarWidth(190);
+		}
+
+		const savedRightWidth = parseFloat(localStorage.getItem("simulator-right-width"));
+		const defaultRightWidth = Math.max(MIN_CANVAS, Math.min(604, getMaxCanvasSize()));
+		if (!isNaN(savedRightWidth)) {
+			this.setSimulationWidth(savedRightWidth);
+		} else {
+			this.setSimulationWidth(defaultRightWidth);
+		}
+
+		// Drag handler for sidebar resizer
+		if (resizerSidebar && projectsSidebar) {
+			let isDragging = false;
+			let startX = 0;
+			let startWidth = 0;
+
+			resizerSidebar.addEventListener("pointerdown", (e) => {
+				e.preventDefault();
+				isDragging = true;
+				startX = e.clientX;
+				startWidth = projectsSidebar.getBoundingClientRect().width;
+				resizerSidebar.setPointerCapture(e.pointerId);
+				resizerSidebar.classList.add("resizing");
+				document.body.style.cursor = "col-resize";
+				document.body.style.userSelect = "none";
+			});
+
+			resizerSidebar.addEventListener("pointermove", (e) => {
+				if (!isDragging) return;
+				const delta = e.clientX - startX;
+				this.setSidebarWidth(startWidth + delta);
+			});
+
+			const endSidebarDrag = (e) => {
+				if (!isDragging) return;
+				isDragging = false;
+				try {
+					resizerSidebar.releasePointerCapture(e.pointerId);
+				} catch (_) {}
+				resizerSidebar.classList.remove("resizing");
+				document.body.style.cursor = "";
+				document.body.style.userSelect = "";
+
+				const finalWidth = projectsSidebar.getBoundingClientRect().width;
+				localStorage.setItem("simulator-sidebar-width", finalWidth.toString());
+				if (this.editor && this.editor.editor) {
+					this.editor.editor.resize();
+				}
+			};
+
+			resizerSidebar.addEventListener("pointerup", endSidebarDrag);
+			resizerSidebar.addEventListener("pointercancel", endSidebarDrag);
+		}
+
+		// Drag handler for main simulation/serial resizer
+		if (resizerMain && containerRight) {
+			let isDragging = false;
+			let startX = 0;
+			let startWidth = 0;
+
+			resizerMain.addEventListener("pointerdown", (e) => {
+				e.preventDefault();
+				isDragging = true;
+				startX = e.clientX;
+				startWidth = containerRight.getBoundingClientRect().width;
+				resizerMain.setPointerCapture(e.pointerId);
+				resizerMain.classList.add("resizing");
+				document.body.style.cursor = "col-resize";
+				document.body.style.userSelect = "none";
+			});
+
+			resizerMain.addEventListener("pointermove", (e) => {
+				if (!isDragging) return;
+				const delta = startX - e.clientX;
+				this.setSimulationWidth(startWidth + delta);
+			});
+
+			const endMainDrag = (e) => {
+				if (!isDragging) return;
+				isDragging = false;
+				try {
+					resizerMain.releasePointerCapture(e.pointerId);
+				} catch (_) {}
+				resizerMain.classList.remove("resizing");
+				document.body.style.cursor = "";
+				document.body.style.userSelect = "";
+
+				const finalWidth = containerRight.getBoundingClientRect().width;
+				localStorage.setItem("simulator-right-width", finalWidth.toString());
+				if (this.editor && this.editor.editor) {
+					this.editor.editor.resize();
+				}
+			};
+
+			resizerMain.addEventListener("pointerup", endMainDrag);
+			resizerMain.addEventListener("pointercancel", endMainDrag);
+		}
+
+		window.addEventListener("resize", () => {
+			if (containerRight) {
+				const currentWidth = containerRight.getBoundingClientRect().width;
+				this.setSimulationWidth(currentWidth);
+			}
+		});
 	}
 
 	async createExamples() {
