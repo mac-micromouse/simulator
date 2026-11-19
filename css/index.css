@@ -173,6 +173,116 @@ html, body {
 	color: white;
 }
 
+.project-chevron {
+	font-size: 0.7em !important;
+	margin-right: 5px !important;
+	color: #888;
+	width: 10px;
+	text-align: center;
+	flex-shrink: 0;
+}
+
+.project-item.selected .project-chevron {
+	color: rgb(180, 190, 205);
+}
+
+.project-files {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	margin-left: 14px;
+	padding-left: 6px;
+	border-left: 1px solid #3c4045;
+	margin-top: 2px;
+	margin-bottom: 5px;
+}
+
+.project-file-item {
+	height: 26px;
+	min-height: 26px;
+	padding: 0 6px 0 8px;
+	color: rgb(190, 195, 202);
+	background: transparent;
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	cursor: pointer;
+	user-select: none;
+	font-size: 0.82em;
+	position: relative;
+	transition: background 0.15s, color 0.15s;
+}
+
+.project-file-item:hover {
+	background: rgba(255, 255, 255, 0.06);
+	color: white;
+}
+
+.project-file-item.selected {
+	background: #474b52;
+	color: white;
+	font-weight: 500;
+}
+
+.project-file-item .file-info {
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+	flex: 1;
+	min-width: 0;
+	margin-right: 4px;
+}
+
+.project-file-item .file-info .fa {
+	margin-right: 6px;
+	font-size: 0.85em;
+	color: #9da3ad;
+	flex-shrink: 0;
+}
+
+.project-file-item.selected .file-info .fa {
+	color: #61afef;
+}
+
+.project-file-item .file-name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.project-file-item .file-actions {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	flex-shrink: 0;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.project-file-item:hover .file-actions {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.project-file-item .file-actions .fa {
+	color: #888e99;
+	cursor: pointer;
+	font-size: 0.85em;
+}
+
+.project-file-item .file-actions .fa:hover {
+	color: white;
+	transform: scale(1.15);
+}
+
+.project-file-item .file-name-input {
+	width: 100%;
+	height: 20px;
+	font-size: 0.82em;
+	padding: 1px 3px;
+}
+
 .project-name-input {
 	outline: none;
 	border: 1px solid #282a2e;

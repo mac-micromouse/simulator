@@ -130,25 +130,40 @@ void loop() {
 			const project = this.projects[i];
 			const item = document.createElement("div");
 			item.classList.add("project-item");
-			if (i === this.currentProject) {
+			const isSelected = (i === this.currentProject);
+
+			if (isSelected) {
 				item.classList.add("selected");
 			}
 
-			const isSelected = (i === this.currentProject);
+			const chevronIcon = isSelected ? "fa-chevron-down" : "fa-chevron-right";
 			const folderIcon = isSelected ? "fa-folder-open" : "fa-folder";
 
 			item.innerHTML = `
 				<div class="project-info">
+					<span class="fa ${chevronIcon} project-chevron"></span>
 					<span class="fa ${folderIcon}"></span>
 					<span class="project-name" title="${project.name}">${project.name}</span>
 				</div>
 				<div class="project-actions">
+					${isSelected ? '<span class="fa fa-plus" title="Add file to project"></span>' : ''}
 					<span class="fa fa-edit" title="Rename project"></span>
 				</div>
 			`;
 
+			const actionsDiv = item.querySelector(".project-actions");
+
+			if (isSelected) {
+				const plusFileSpan = actionsDiv.querySelector(".fa-plus");
+				if (plusFileSpan) {
+					plusFileSpan.addEventListener("click", (event) => {
+						event.stopPropagation();
+						this.addFile("untitled", "");
+					});
+				}
+			}
+
 			if (this.projects.length > 1) {
-				const actionsDiv = item.querySelector(".project-actions");
 				const trashSpan = document.createElement("span");
 				trashSpan.classList.add("fa", "fa-trash");
 				trashSpan.title = "Delete project";
@@ -173,6 +188,71 @@ void loop() {
 			});
 
 			projectsList.appendChild(item);
+
+			// If project is active, display its flat filesystem tree below it
+			if (isSelected) {
+				const filesContainer = document.createElement("div");
+				filesContainer.classList.add("project-files");
+
+				for (let f = 0; f < project.files.length; f++) {
+					const file = project.files[f];
+					const isFileSelected = (f === this.currentFile);
+					const fileItem = document.createElement("div");
+					fileItem.classList.add("project-file-item");
+					if (isFileSelected) {
+						fileItem.classList.add("selected");
+					}
+
+					fileItem.innerHTML = `
+						<div class="file-info">
+							<span class="fa fa-file-code"></span>
+							<span class="file-name" title="${file.name}">${file.name}</span>
+						</div>
+						<div class="file-actions">
+							<span class="fa fa-download" title="Download file"></span>
+						</div>
+					`;
+
+					const fileActions = fileItem.querySelector(".file-actions");
+
+					if (f !== 0) {
+						const editSpan = document.createElement("span");
+						editSpan.classList.add("fa", "fa-edit");
+						editSpan.title = "Rename file";
+						editSpan.addEventListener("click", (event) => {
+							event.stopPropagation();
+							this.createEditSidebarFileNameInput(fileItem, f);
+						});
+
+						const trashSpan = document.createElement("span");
+						trashSpan.classList.add("fa", "fa-trash");
+						trashSpan.title = "Delete file";
+						trashSpan.addEventListener("click", (event) => {
+							event.stopPropagation();
+							this.removeFile(file.name);
+						});
+
+						fileActions.appendChild(editSpan);
+						fileActions.appendChild(trashSpan);
+					}
+
+					fileItem.querySelector(".fa-download").addEventListener("click", (event) => {
+						event.stopPropagation();
+						downloadFile(file.code, file.name, "text/x-c++src");
+					});
+
+					fileItem.addEventListener("click", (event) => {
+						event.stopPropagation();
+						if (this.currentFile !== f) {
+							this.switchFile(file.name);
+						}
+					});
+
+					filesContainer.appendChild(fileItem);
+				}
+
+				projectsList.appendChild(filesContainer);
+			}
 		}
 	}
 
@@ -360,6 +440,7 @@ void loop() {
 		const index = this.files.indexOf(file);
 		this.currentFile = index;
 		this.renderFileTabs();
+		this.renderProjectsList();
 		this.isChanging = true;
 		this.editor.setValue(file.code, -1);
 		this.editor.getSession().getUndoManager().reset();
@@ -388,12 +469,17 @@ void loop() {
 
 		this.files.splice(index, 1);
 		if (this.currentFile === index) {
-			this.currentFile--;
+			this.currentFile = Math.max(0, this.currentFile - 1);
 			this.switchFile(this.files[this.currentFile].name);
+		} else {
+			if (this.currentFile > index) {
+				this.currentFile--;
+			}
+			this.renderFileTabs();
+			this.renderProjectsList();
+			this.saveImmediate();
+			this.startSaveProcess();
 		}
-		this.renderFileTabs();
-		this.saveImmediate();
-		this.startSaveProcess();
 	}
 
 	saveImmediate() {
@@ -433,6 +519,7 @@ void loop() {
 		const setName = () => {
 			if (input.value === fileNameSpan.innerText) {
 				this.renderFileTabs();
+				this.renderProjectsList();
 				return;
 			}
 
@@ -442,6 +529,55 @@ void loop() {
 
 			this.files.filter(file => file.name === fileNameSpan.innerText)[0]
 				.name = input.value;
+			this.renderFileTabs();
+			this.renderProjectsList();
+			this.saveImmediate();
+		};
+
+		input.addEventListener("click", event => event.stopPropagation());
+		input.addEventListener("blur", () => setName());
+		input.addEventListener("keydown", event => {
+			if (event.key.toLowerCase() === "enter") {
+				setName();
+			}
+
+			if (event.key.toLowerCase() === "escape") {
+				this.renderFileTabs();
+				this.renderProjectsList();
+			}
+		});
+	}
+
+	createEditSidebarFileNameInput(elem, fileIndex) {
+		const fileNameSpan = elem.querySelector(".file-name");
+		const fileActions = elem.querySelector(".file-actions");
+		fileNameSpan.style.display = "none";
+		if (fileActions) fileActions.style.display = "none";
+
+		const input = document.createElement("input");
+		input.classList.add("file-name-input");
+		input.value = this.files[fileIndex].name;
+		elem.querySelector(".file-info").appendChild(input);
+		input.focus();
+		input.select();
+
+		const setName = () => {
+			const newName = input.value.trim();
+			if (!newName || newName === this.files[fileIndex].name) {
+				this.renderProjectsList();
+				this.renderFileTabs();
+				return;
+			}
+
+			if (this.files.some((f, idx) => idx !== fileIndex && f.name === newName)) {
+				alert("A file with this name already exists.");
+				this.renderProjectsList();
+				this.renderFileTabs();
+				return;
+			}
+
+			this.files[fileIndex].name = newName;
+			this.renderProjectsList();
 			this.renderFileTabs();
 			this.saveImmediate();
 		};
@@ -454,6 +590,7 @@ void loop() {
 			}
 
 			if (event.key.toLowerCase() === "escape") {
+				this.renderProjectsList();
 				this.renderFileTabs();
 			}
 		});
