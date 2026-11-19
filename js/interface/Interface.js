@@ -94,7 +94,8 @@ class Interface {
 
 	selectLeftTab(tab, button) {
 		[...document.querySelectorAll(".left-tab")].forEach(item => item.style.display = "none");
-		tab.style.display = tab.id === "editor-container" ? "flex" : "block";
+		const flexTabs = ["editor-container", "documentation-container"];
+		tab.style.display = flexTabs.includes(tab.id) ? "flex" : "block";
 
 		[...document.getElementById("left-top").querySelectorAll(".selected")]
 			.forEach(elem => elem.classList.remove("selected"));
@@ -304,10 +305,26 @@ class Interface {
 	}
 
 	async createDocumentation() {
-		const documentationContainer = document.getElementById("documentation-container");
+		const docsContent = document.getElementById("docs-content");
+		const tocList = document.getElementById("docs-toc-list");
 		const docsMd = await (await fetch("documentation/main.md")).text();
 
-		documentationContainer.innerHTML = this.mdConverter.makeHtml(docsMd);
+		docsContent.innerHTML = this.mdConverter.makeHtml(docsMd);
 		hljs.highlightAll();
+
+		// Build TOC from parsed headers
+		const headers = docsContent.querySelectorAll("h1, h2, h3");
+		headers.forEach((h, i) => {
+			const id = "doc-heading-" + i;
+			h.id = id;
+
+			const item = document.createElement("div");
+			item.classList.add("toc-item", "toc-" + h.tagName.toLowerCase());
+			item.textContent = h.textContent;
+			item.addEventListener("click", () => {
+				docsContent.scrollTo({ top: h.offsetTop - 10, behavior: "smooth" });
+			});
+			tocList.appendChild(item);
+		});
 	}
 }

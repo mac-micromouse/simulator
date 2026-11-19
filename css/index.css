@@ -529,12 +529,74 @@ canvas, #code-editor, #serial-interface {
 	}
 }
 
+#examples-container, #options-container {
+	padding: 10px 20px;
+}
+
 #documentation-container, #examples-container, #options-container {
 	background: #2d2e30;
-	padding: 10px 20px;
 	border-radius: 5px;
 	color: white;
 	overflow: auto;
+}
+
+#documentation-container {
+	display: flex;
+	flex-direction: row;
+	padding: 0;
+	overflow: hidden;
+}
+
+#docs-toc-sidebar {
+	width: 190px;
+	min-width: 150px;
+	flex-shrink: 0;
+	background: #2d2e30;
+	border-right: 1px solid #222325;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+#docs-toc-header {
+	margin-bottom: 0;
+	border-radius: 5px 0 0 0;
+	border-bottom: 1px solid #222325;
+	flex-shrink: 0;
+}
+
+#docs-toc-list {
+	overflow-y: auto;
+	flex: 1;
+	padding: 6px 0;
+}
+
+.toc-item {
+	padding: 4px 12px;
+	cursor: pointer;
+	font-size: 0.82em;
+	color: #ccd0d6;
+	border-left: 2px solid transparent;
+	transition: background 0.15s, border-color 0.15s;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.toc-item:hover {
+	background: #36393d;
+	border-left-color: #5b8dd9;
+}
+
+.toc-h1 { font-weight: bold; }
+.toc-h2 { padding-left: 20px; }
+.toc-h3 { padding-left: 30px; color: #aaa; }
+
+#docs-content {
+	flex: 1;
+	min-width: 0;
+	overflow-y: auto;
+	padding: 10px 20px;
 }
 
 h1 {
@@ -627,7 +689,7 @@ h1 {
 	font-size: 1.1em;
 }
 
-#documentation-container .section {
+#docs-content .section {
 	margin-left: 20px;
 }
 
