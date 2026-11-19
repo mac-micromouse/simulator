@@ -47,15 +47,26 @@
 					</div>
 				</div>
 				<div class="left-tab" id="editor-container">
-					<div class="section-header small">
-						<div class="section-header-items">
-							<div id="files-list">
-								<div class="section-header-elem selected">bot.cpp</div>
+					<div id="projects-sidebar">
+						<div class="section-header small" id="projects-header">
+							<div class="section-header-items">
+								<span class="sidebar-title"><span class="fa fa-folder-open"></span> Projects</span>
 							</div>
-							<div class="section-header-button" id="button-add-file" title="Add file"><span class="fa fa-plus"></span></div>
+							<div class="section-header-button" id="button-add-project" title="Add project"><span class="fa fa-plus"></span></div>
 						</div>
+						<div id="projects-list"></div>
 					</div>
-					<div id="code-editor"></div>
+					<div id="editor-main">
+						<div class="section-header small">
+							<div class="section-header-items">
+								<div id="files-list">
+									<div class="section-header-elem selected">bot.cpp</div>
+								</div>
+								<div class="section-header-button" id="button-add-file" title="Add file"><span class="fa fa-plus"></span></div>
+							</div>
+						</div>
+						<div id="code-editor"></div>
+					</div>
 				</div>
 				<div class="left-tab" id="documentation-container"></div>
 				<div class="left-tab" id="examples-container">

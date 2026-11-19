@@ -32,6 +32,7 @@ class Interface {
 
 			const files = this.editor.files;
 			files[this.editor.currentFile].code = this.editor.editor.getValue();
+			this.editor.saveImmediate();
 			await simulator.compileAndDeploy(files);
 		});
 
@@ -64,6 +65,13 @@ class Interface {
 			this.editor.addFile("untitled", "");
 		});
 
+		const projectPlusButton = document.getElementById("button-add-project");
+		if (projectPlusButton) {
+			projectPlusButton.addEventListener("click", () => {
+				this.editor.addProject();
+			});
+		}
+
 		const tabSimulation = document.getElementById("tab-simulation");
 		const tabOptions = document.getElementById("tab-options");
 
@@ -85,12 +93,16 @@ class Interface {
 
 	selectLeftTab(tab, button) {
 		[...document.querySelectorAll(".left-tab")].forEach(item => item.style.display = "none");
-		tab.style.display = "block";
+		tab.style.display = tab.id === "editor-container" ? "flex" : "block";
 
 		[...document.getElementById("left-top").querySelectorAll(".selected")]
 			.forEach(elem => elem.classList.remove("selected"));
 
 		button.classList.add("selected");
+
+		if (this.editor && tab.id === "editor-container") {
+			this.editor.editor.resize();
+		}
 	}
 	
 	selectRightTab(tab, button) {
@@ -123,7 +135,7 @@ class Interface {
 				this.selectLeftTab(editorContainer, tabEditor);
 
 				const exampleCode = await (await fetch(example.path)).text();
-				this.editor.addFile(example.saveAs, exampleCode);
+				this.editor.addProject(example.name, [{ name: "bot.cpp", code: exampleCode }]);
 			});
 		}
 	}
