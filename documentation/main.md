@@ -58,10 +58,10 @@ Due to the limitations of the simulator, this method must be called whenever you
 
 <div class="section">
 ```cpp
-void ledcAttachPin(uint8_t pin, uint8_t channel)
+void ledcAttach(uint8_t pin, uint32_t freq, uint8_t resolution)
 ```
 
-Assigns a PWM channel to a specific hardware pin.
+Configures a GPIO pin for PWM output and automatically assigns an LEDC channel.
 
 ```cpp
 void ledcWrite(uint8_t channel, uint32_t duty)
