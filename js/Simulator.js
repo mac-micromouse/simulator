@@ -35,6 +35,7 @@ class Simulator {
 		this.stopped = false;
 		this.lastFrameTime = performance.now();
 		this.lastRenderTime = 0;
+		this.startTime = 0;
 	}
 
 	loadOptions() {
@@ -88,16 +89,18 @@ class Simulator {
 				this.maze.setBuildWall(event.data.cell_x, event.data.cell_y, event.data.dir, 0);
 			}
 		};
+
+		this.startTime = performance.now();
 	}
 
-	loop(currentTime) {
+	loop() {
 		const startTime = performance.now();
 		const elapsed = performance.now() - this.lastFrameTime;
 		const delta = elapsed / (1000 / 60);
 		this.lastFrameTime = performance.now();
 
 		if (!this.stopped) {
-			this.bot.update(currentTime, delta);
+			this.bot.update(startTime - this.startTime, delta);
 		}
 
 		if (performance.now() - this.lastRenderTime > 1000 / 30) {
